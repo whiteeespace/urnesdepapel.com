@@ -1,0 +1,228 @@
+@use "sass:math";
+
+// Breakpoints follow the content, not devices.
+$phone: 600px;
+$tablet: 860px;
+// Below this the header links move into a menu.
+$nav: 900px;
+
+@mixin below($width) {
+  @media (max-width: $width) {
+    @content;
+  }
+}
+
+@mixin above($width) {
+  @media (min-width: ($width + 1)) {
+    @content;
+  }
+}
+
+// The Figma design block is drawn at 12px body text; the site scales it so 12px reads as 16px.
+@function fig($px) {
+  @return math.div($px, 12) * 1rem;
+}
+
+// Type styles, one per element of the Figma "Design block". Serif for titles and headings,
+// Hanken Grotesk for text and UI, 42dot Sans for small labels. No tracked capitals.
+
+// Eyebrows, breadcrumbs, small captions.
+@mixin label {
+  font-family: var(--font-label);
+  font-weight: 400;
+  font-size: fig(12);
+  line-height: math.div(22.4, 12);
+  text-transform: lowercase;
+  color: var(--color-muted);
+}
+
+// Each page's main title is set like the logo: its own capitals, widely spaced.
+@mixin titling {
+  font-family: var(--font-titling);
+  font-weight: 400;
+  text-transform: uppercase;
+  // Measured against the logo's own spacing of URNES DE PAPEL.
+  letter-spacing: 0.11em;
+}
+
+// Pulls a text title up so its capitals sit where the home page's SVG lettering puts them: that
+// box starts at the A's apex, a hair above the other capitals (measured in the browser: 0.203 em).
+@mixin cap-trim {
+  margin-top: -0.203em;
+}
+
+// Page titles match the home page's lettering: same cap height at every width
+// (its SVG is clamp(18rem, 55vw, 60rem) wide; capitals are 7.02 % of that, i.e. 0.7 em), logo grey.
+@mixin title {
+  @include titling;
+  width: fit-content;
+  max-width: 100%;
+  font-size: clamp(1.8rem, 5.52vw, 6.02rem);
+  line-height: 1.1;
+  color: var(--color-ink-80);
+  text-wrap: balance;
+
+  // On phones, as large as the home page's two-line lettering, which runs the full content width
+  // (its capitals are 12.6 % of that width, i.e. 0.18 em). Words too long for a line hyphenate,
+  // or break if the browser can't.
+  @include below($phone) {
+    font-size: calc((100vw - 2 * var(--gutter)) * 0.18);
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+}
+
+@mixin lede {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  font-size: fig(14);
+  line-height: math.div(18, 14);
+  color: var(--color-ink);
+}
+
+// The description under each page's title: its opening line, in the serif like the headings
+// and larger than a lede. A little smaller on phones.
+@mixin description {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(#{fig(16)}, 1.9vw, #{fig(24)});
+  line-height: 1.4;
+  color: var(--color-ink-80);
+  text-wrap: pretty;
+
+  @include below($phone) {
+    font-size: fig(14);
+  }
+}
+
+@mixin heading {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: fig(14);
+  line-height: math.div(20, 14);
+  color: var(--color-ink);
+}
+
+@mixin body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: fig(12);
+  line-height: 1.5;
+}
+
+// The logo's two fibres turned on their side, the long one crossed by the short one as they
+// cross the U (traced from LOGO_MARK_PATHS), drawn in the current colour. The drawing stretches
+// to the box and keeps a hairline stroke.
+@mixin fibres {
+  background: currentColor;
+  mask: url("/fibres.svg") 0 0 / 100% 100% no-repeat;
+}
+
+// Muted aside (lead times, notes), introduced by a short gold line of fibres.
+@mixin note {
+  display: flex;
+  align-items: center;
+  gap: fig(10);
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: fig(12);
+  line-height: math.div(20, 12);
+  color: var(--color-muted);
+
+  &::before {
+    content: "";
+    flex: none;
+    width: fig(28);
+    height: fig(6);
+    color: var(--color-gold);
+    @include fibres;
+  }
+}
+
+@mixin urn-number {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: fig(20);
+  line-height: 1;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+@mixin urn-name {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: fig(18);
+  line-height: 1.6;
+  text-transform: lowercase;
+  color: var(--color-ink);
+}
+
+@mixin term {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: fig(12);
+  line-height: math.div(18.4, 12);
+  text-transform: lowercase;
+  color: var(--color-muted);
+}
+
+@mixin value {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: fig(12);
+  line-height: math.div(24.8, 12);
+  color: var(--color-ink);
+}
+
+@mixin price {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: fig(14);
+  line-height: math.div(27.2, 14);
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+@mixin nav-link {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: fig(14);
+  text-transform: lowercase;
+}
+
+@mixin text-link {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: fig(14);
+  color: var(--color-ink-80);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+
+  &:hover {
+    color: var(--color-ink);
+  }
+}
+
+@mixin field-label {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: fig(12);
+  line-height: math.div(22.4, 12);
+  color: var(--color-ink-80);
+}
+
+@mixin hint {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: fig(11);
+  line-height: math.div(20.8, 11);
+  color: var(--color-muted);
+}
+
+@mixin error {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: fig(11);
+  line-height: math.div(21.6, 11);
+  color: var(--color-error);
+}

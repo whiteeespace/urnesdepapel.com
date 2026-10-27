@@ -1,0 +1,172 @@
+@use "mixins" as *;
+
+// The lead-time note under the title.
+.note {
+  @include description;
+}
+
+// The base urn on the left, as tall as the four options beside it.
+.pricing {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(16px, 2vw, 24px);
+}
+
+.addOns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 24px);
+}
+
+// The card is the photo: the figure fills it and the text sits on it. A spacer in the same grid
+// cell sets the card's square shape as a minimum, so an open description makes the card taller
+// rather than spilling out of it.
+.card {
+  position: relative;
+  display: grid;
+  min-width: 0;
+
+  &::before {
+    content: "";
+    grid-area: 1 / 1;
+    padding-top: 100%;
+  }
+}
+
+// Overrides the figure's own ratio so it covers the whole card.
+.card .media {
+  position: absolute;
+  inset: 0;
+  aspect-ratio: auto;
+}
+
+// Fills the height of the options column rather than keeping a shape of its own.
+.base::before {
+  padding-top: 0;
+}
+
+// A frosted paper label inset at the bottom of the photo keeps the text legible on any photo
+// without darkening it.
+.overlay {
+  position: relative;
+  grid-area: 1 / 1;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: fig(6);
+  margin: fig(10);
+  padding: fig(10) fig(12);
+  background: rgb(247 244 237 / 0.82);
+  backdrop-filter: blur(8px);
+  color: var(--color-ink);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.name {
+  @include heading;
+  margin: 0;
+  color: inherit;
+  text-wrap: balance;
+}
+
+.price {
+  @include price;
+  color: inherit;
+}
+
+.base .price {
+  font-size: fig(18);
+}
+
+.details {
+  interpolate-size: allow-keywords;
+
+  // Where supported, the description slides open instead of appearing at once.
+  &::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      content-visibility 0.35s allow-discrete;
+  }
+
+  &[open]::details-content {
+    block-size: auto;
+  }
+}
+
+.summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  @include label;
+  color: var(--color-ink-80);
+  cursor: pointer;
+  list-style: none;
+  transition: color 0.2s ease;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  // A plus that turns into a cross when open.
+  &::after {
+    content: "+";
+    font-family: var(--font-sans);
+    font-size: 1.15em;
+    line-height: 1;
+    transition: rotate 0.3s ease;
+  }
+
+  [open] > &::after {
+    rotate: 45deg;
+  }
+
+  &:hover {
+    color: var(--color-ink);
+  }
+
+  &:focus-visible {
+    outline-offset: 2px;
+  }
+}
+
+.description {
+  @include body;
+  margin: fig(4) 0 0;
+  max-width: 36rem;
+  color: inherit;
+}
+
+@include below($tablet) {
+  .pricing {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .base::before {
+    padding-top: 100%;
+  }
+}
+
+@include below($phone) {
+  .addOns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .base::before {
+    padding-top: 125%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .details::details-content,
+  .summary::after {
+    transition: none;
+  }
+}

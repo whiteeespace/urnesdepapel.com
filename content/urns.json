@@ -1,0 +1,123 @@
+{
+  "currency": "CAD",
+  "models": [
+    { "slug": "papillon", "name": { "fr": "Papillon", "en": "Papillon" }, "urns": [23, 30, 38] },
+    { "slug": "anemone", "name": { "fr": "Anémone", "en": "Anémone" }, "urns": [20, 21, 24, 26, 29, 36, 37, 42] },
+    { "slug": "tulipe", "name": { "fr": "Tulipe", "en": "Tulipe" }, "urns": [22, 35, 43, 44] }
+  ],
+  "urns": [
+    {
+      "number": 20, "model": "anemone", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca blanchi, linter de coton, kozo", "en": "Bleached abaca, cotton linter, kozo" },
+      "colour": { "fr": "Gris argent", "en": "Silver gray" },
+      "materials": { "fr": "Lavis de pigment naturel et médium acrylique, colle de riz, colle blanche, vernis naturel à base de plante Earth Paint, poudre d’aluminium", "en": "Natural pigment and acrylic medium washes, rice glue, white glue, Earth Paint natural plant-based varnish, aluminum powder" },
+      "description": { "fr": "Patine aspect pierre, rainures formées par l’insertion de tiges lors du moulage de l’urne.", "en": "Stone-look patina, grooves formed by the insertion of rods at the urn’s molding stage." }
+    },
+    {
+      "number": 21, "model": "anemone", "price": 350, "inCanvas": false,
+      "fibres": { "fr": "Abaca blanchi, linter de coton, kozo", "en": "Bleached abaca, cotton linter, kozo" },
+      "colour": { "fr": "Ocre jaune", "en": "Yellow ochre" },
+      "materials": { "fr": "Papier fait main embossé, papier japonais, pigment naturel, médium acrylique, colle de riz, colle blanche, poudre de konnyaku, poudre d’or", "en": "Embossed handmade paper, Japanese paper, natural pigment, acrylic medium, rice glue, white glue, konnyaku powder, gold powder" },
+      "description": { "fr": "Effet technique mixte : papiers embossés à motifs de dentelle et floral. Lumière et humilité de l’ocre jaune.", "en": "Mixed media effect: embossed papers with lace and floral patterns. Light effects and humility of the yellow ochre." }
+    },
+    {
+      "number": 22, "model": "tulipe", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca blanchi, linter de coton, kozo", "en": "Bleached abaca, cotton linter, kozo" },
+      "colour": { "fr": "Gris clair, vert pâle, blanc", "en": "Light gray, pale green, almond white" },
+      "materials": { "fr": "Appliqués de papier fait main, fibres mélangées, pigment naturel, médium acrylique, colle de riz, colle blanche, poudre de konnyaku, poudre d’or", "en": "Appliqués of handmade paper, mixed fibers, natural pigment, acrylic medium, rice glue, white glue, konnyaku powder, gold powder" },
+      "description": { "fr": "Urne aux reflets gris perle, une texture raffinée ; apaisement et silence.", "en": "Urn with pearl gray reflections, a refined texture; calm and silence." }
+    },
+    {
+      "number": 23, "model": "papillon", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca blanchi, linter de coton, kozo", "en": "Bleached abaca, cotton linter, kozo" },
+      "colour": { "fr": "Blanc neutre", "en": "Neutral white" },
+      "materials": { "fr": "Papier coton fait main embossé à motif floral, colle de riz, colle blanche, poudre de konnyaku", "en": "Handmade embossed cotton paper with floral pattern, rice glue, white glue, konnyaku powder" },
+      "description": { "fr": "Une composition florale discrète et réconfortante.", "en": "A discreet and comforting floral arrangement." }
+    },
+    {
+      "number": 24, "model": "anemone", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca blanchi, linter de coton, kozo", "en": "Bleached abaca, cotton linter, kozo" },
+      "colour": { "fr": "Sable", "en": "Sand" },
+      "materials": { "fr": "Lavis pigment naturel et médium acrylique, colle de riz, colle blanche, appliqués de papier uzumaki, poudre de konnyaku", "en": "Natural pigment and acrylic medium washes, rice glue, white glue, uzumaki paper appliqués, konnyaku powder" },
+      "description": { "fr": "Urne avec insertion d’une page d’un livre cher à la personne décédée ou un proche. Agencement rassurant de mots, de papier fait main et d’appliqués d’uzumaki.", "en": "Urn with insertion of a page from a book dear to the deceased or a loved one. Reassuring arrangement of words, handmade paper and uzumaki appliqués." }
+    },
+    {
+      "number": 26, "model": "anemone", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca blanchi, linter de coton, kozo", "en": "Bleached abaca, cotton linter, kozo" },
+      "colour": { "fr": "Vert français", "en": "French green" },
+      "materials": { "fr": "Papier fait main embossé, lavis de pigment naturel et médium acrylique, colle de riz, colle blanche, poudre de konnyaku", "en": "Handmade embossed paper, natural pigment and acrylic medium wash, rice glue, white glue, konnyaku powder" },
+      "description": { "fr": "Sobriété, renouveau et tranquillité.", "en": "Sobriety, renewal and tranquility." }
+    },
+    {
+      "number": 29, "model": "anemone", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca blanchi, linter de coton, kozo", "en": "Bleached abaca, cotton linter, kozo" },
+      "colour": { "fr": "Blanc chaud, vert pâle, or", "en": "Warm white, pale green, gold" },
+      "materials": { "fr": "Pigment naturel et médium acrylique, colle de riz, colle blanche, papier uzumaki, poudre de konnyaku", "en": "Natural pigment and acrylic medium, rice glue, white glue, uzumaki paper, konnyaku powder" },
+      "description": { "fr": "Un effet à la fois marbré et rustique.", "en": "A marbled and rustic effect." }
+    },
+    {
+      "number": 30, "model": "papillon", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca blanchi, linter de coton, kozo", "en": "Bleached abaca, cotton linter, kozo" },
+      "colour": { "fr": "Blanc chaud, vert pâle, or", "en": "Warm white, pale green, gold" },
+      "materials": { "fr": "Appliqués de papier fait main, fibres mélangées, pigment naturel et médium acrylique, colle de riz, colle blanche, poudre d’or, poudre de konnyaku", "en": "Appliqués of handmade paper, mixed fibers, natural pigment and acrylic medium, rice glue, white glue, gold powder, konnyaku powder" },
+      "description": { "fr": "Un paysage en papier : silence et apaisement.", "en": "A paper landscape: silence and appeasement." }
+    },
+    {
+      "number": 35, "model": "tulipe", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca brut, coton textile", "en": "Raw abaca, textile cotton" },
+      "colour": { "fr": "Blanc amande, vert", "en": "Almond white, green" },
+      "materials": { "fr": "Appliqués de papier fait main, fibres de coton, colle de riz, squelettes de feuilles séchés, fil de papier, poudre de konnyaku", "en": "Appliqués of handmade paper, cotton fiber, rice glue, dried leaf skeletons, paper yarn, konnyaku powder" },
+      "description": { "fr": "Effet de légèreté d’un envol ?", "en": "Effect of the lightness of wings spreading?" }
+    },
+    {
+      "number": 36, "model": "anemone", "price": 350, "inCanvas": false,
+      "fibres": { "fr": "Abaca brut, coton textile, lin, chanvre", "en": "Raw abaca, textile cotton, flax, hemp" },
+      "colour": { "fr": "Gris chaud", "en": "Warm gray" },
+      "materials": { "fr": "Papier fait de lin et de chanvre embossé avec un motif floral, colle de riz, colle blanche, poudre de konnyaku", "en": "Paper made of linen and hemp embossed with a floral pattern, rice glue, white glue, konnyaku powder" },
+      "description": { "fr": "Aspect rustique et floral ; la solidité des fibres de lin et de chanvre de notre territoire.", "en": "Rustic and floral appearance; the strength of flax and hemp fibers from our territory." }
+    },
+    {
+      "number": 37, "model": "anemone", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca blanchi, linter de coton, kozo, tiges de vigne", "en": "Bleached abaca, cotton linter, kozo, vine stalks" },
+      "colour": { "fr": "Blanc chaud, brun", "en": "Warm white, brown" },
+      "materials": { "fr": "Papier fait main de coton embossé à motif floral, tiges de vigne, colle de riz, colle blanche, poudre de konnyaku", "en": "Handmade embossed cotton paper with floral pattern, vine stalks, rice glue, white glue, konnyaku powder" },
+      "description": { "fr": "Délicatesse et blancheur du motif floral embossé et présence de la tige de vigne brute. Douceur et solidité.", "en": "Delicacy and whiteness of the embossed floral pattern and presence of the raw vine stem. Softness and strength." }
+    },
+    {
+      "number": 38, "model": "papillon", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca brut, coton textile, asclépiade", "en": "Raw abaca, textile cotton, milkweed" },
+      "colour": { "fr": "Ocre jaune pâle", "en": "Pale yellow ochre" },
+      "materials": { "fr": "Appliqués de papier fait main à base de duvet d’asclépiade, colle de riz, colle blanche, poudre de konnyaku", "en": "Appliqués of handmade paper made from milkweed down, rice glue, white glue, konnyaku powder" },
+      "description": { "fr": "Des fleurs d’asclépiades embossées sur un papier fait à partir de fibres de cette plante amie des monarques.", "en": "Milkweed flowers embossed on paper made from the fibers of this monarch-friendly plant." }
+    },
+    {
+      "number": 42, "model": "anemone", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca brut, coton textile, tissus de jeans, linter de jeans", "en": "Raw abaca, textile cotton, denim fabrics, denim linter" },
+      "colour": { "fr": "Bleu pâle", "en": "Pale blue" },
+      "materials": { "fr": "Appliqués de papier fait main à partir de tissus de jeans, fil à coudre, colle de riz, colle blanche, poudre de konnyaku", "en": "Handmade paper appliqués from denim, sewing thread, rice glue, white glue, konnyaku powder" },
+      "description": { "fr": "Une couleur provenant de la pulpe de jeans ayant appartenu à la personne décédée. Les fibres de jeans personnalisent cette urne bleue pâle.", "en": "A color derived from the pulp of jeans that belonged to the deceased. The denim fibers personalize this pale blue urn." }
+    },
+    {
+      "number": 43, "model": "tulipe", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca brut, coton textile", "en": "Raw abaca, textile cotton" },
+      "colour": { "fr": "Blanc neutre, vert, gris pâle, or", "en": "Neutral white, green, pale gray, gold" },
+      "materials": { "fr": "Appliqués de papier fait main, fibres mélangées, pigment naturel et médium acrylique, colle de riz, colle blanche, poudre d’or, papier japonais sunome silver, poudre de konnyaku", "en": "Appliqués of handmade paper, mixed fibers, natural pigment and acrylic medium, rice glue, white glue, sunome silver Japanese paper, gold powder, konnyaku powder" },
+      "description": { "fr": "Urne aux reflets gris perle, une texture raffinée ; apaisement et silence.", "en": "Urn with pearl gray reflections, a refined texture; calm and silence." }
+    },
+    {
+      "number": 44, "model": "tulipe", "price": 350, "inCanvas": true,
+      "fibres": { "fr": "Abaca brut, coton textile, asclépiade", "en": "Raw abaca, textile cotton, milkweed" },
+      "colour": { "fr": "Jaune ocre pâle", "en": "Pale yellow ochre" },
+      "materials": { "fr": "Appliqués de papier fait main à base de duvet d’asclépiade, papier uzumaki, colle de riz, colle blanche, poudre de konnyaku", "en": "Handmade paper appliqués made from milkweed down, uzumaki paper, rice glue, white glue, konnyaku powder" },
+      "description": { "fr": "Des fleurs d’asclépiades embossées dans un papier fait à partir de fibres de cette plante amie des monarques.", "en": "Milkweed flowers embossed on paper made from the fibers of this monarch-friendly plant." }
+    }
+  ],
+  "options": [
+    { "slug": "base", "price": 350, "name": { "fr": "Urne de base", "en": "Basic urn" }, "description": { "fr": "L’urne en tant que telle avec éléments de finition de base.", "en": "The urn as such, with basic finishing elements." } },
+    { "slug": "pulp", "price": 100, "name": { "fr": "Personnalisation pulpe de base", "en": "Basic pulp customization" }, "description": { "fr": "Urne moulée à l’aide d’une pulpe fabriquée de tissus d’un vêtement de la personne décédée.", "en": "Urn molded from a pulp made from the fabric of the deceased’s clothing." } },
+    { "slug": "additions", "price": 50, "name": { "fr": "Personnalisation par ajouts d’éléments", "en": "Customization by adding elements" }, "description": { "fr": "Ajout d’une photo, un bouton, la page d’un livre, une lettre, tout petit objet significatif au moment de la finition de l’urne.", "en": "Adding a photo, a button, a book page, a letter or any small meaningful object at the finishing stage." } },
+    { "slug": "pouch", "price": 100, "name": { "fr": "Pochette de lin et soie", "en": "Linen and silk pouch" }, "description": { "fr": "Pochette faite à la main de lin avec doublure de soie ; une fois l’urne et ses cendres dispersées dans l’eau ou enterrées, la pochette reste en souvenir.", "en": "Handmade linen pouch with silk lining; once the urn and its ashes are dispersed in water or buried, the pouch remains as a keepsake." } },
+    { "slug": "pouch-custom", "priceMin": 50, "priceMax": 75, "name": { "fr": "Personnalisation de la pochette", "en": "Pouch customization" }, "description": { "fr": "Le nom de la personne décédée brodé sur la pochette. De même, un petit dessin ou une citation significative.", "en": "The name of the deceased embroidered on the pouch, or a meaningful motif or quote." } }
+  ],
+  "notes": { "fr": "Des délais de fabrication s’appliquent.", "en": "Manufacturing lead times apply." }
+}

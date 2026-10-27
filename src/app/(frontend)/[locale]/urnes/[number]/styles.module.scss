@@ -1,0 +1,128 @@
+@use "mixins" as *;
+
+.crumbs {
+  @include label;
+
+  a {
+    color: var(--color-muted);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-ink);
+      text-decoration: underline;
+    }
+  }
+}
+
+.detail {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.main {
+  grid-column: 1 / -1;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+// The page's main title, styled like the other page titles. It sits in a narrower column,
+// so it stops growing a little earlier; on phones it is as large as every title.
+.heading {
+  @include title;
+  @include cap-trim;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.3em;
+
+  @include above($phone) {
+    font-size: clamp(1.9rem, 3.6vw, 3.5rem);
+  }
+}
+
+.number {
+  @include urn-number;
+  font-size: 0.75em;
+}
+
+.description {
+  @include lede;
+}
+
+.specs {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  div {
+    display: grid;
+    grid-template-columns: 8.5rem minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  dt {
+    @include term;
+    padding-top: 0.2em;
+  }
+
+  dd {
+    @include value;
+  }
+}
+
+.price dd {
+  @include price;
+}
+
+.note {
+  @include note;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 22px;
+}
+
+.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+
+  a {
+    @include nav-link;
+    color: var(--color-ink-80);
+    text-decoration: none;
+
+    &:hover {
+      color: var(--color-ink);
+      text-decoration: underline;
+    }
+  }
+}
+
+@include below($tablet) {
+  .detail {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@include below($phone) {
+  .specs div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}

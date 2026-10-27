@@ -1,0 +1,40 @@
+@use "mixins" as *;
+
+.artisan {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+
+.bio {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.name {
+  @include heading;
+}
+
+.columns {
+  columns: 2 18rem;
+  column-gap: 40px;
+
+  p {
+    @include body;
+    margin-bottom: 1em;
+    break-inside: avoid-column;
+    hyphens: auto;
+  }
+}
+
+@include below($tablet) {
+  .artisan {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .portrait {
+    max-width: 360px;
+  }
+}

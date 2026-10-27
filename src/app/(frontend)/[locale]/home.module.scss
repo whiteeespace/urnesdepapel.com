@@ -1,0 +1,103 @@
+@use "mixins" as *;
+
+// The brand name drawn from the logo artwork itself, in the logo's grey.
+.wordmark {
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: fig(12);
+  line-height: 0;
+  color: var(--color-ink-80);
+}
+
+.wordmarkArt {
+  width: clamp(18rem, 55vw, 60rem);
+  max-width: 100%;
+}
+
+// On phones the name breaks onto two lines so it can run the full width, much larger.
+.wordmarkStacked {
+  display: none;
+  width: 100%;
+}
+
+@include below($phone) {
+  .wordmark {
+    width: 100%;
+  }
+
+  .wordmarkArt {
+    display: none;
+  }
+
+  .wordmarkStacked {
+    display: block;
+  }
+}
+
+.intro {
+  @include description;
+}
+
+// The one-line intro runs wider than other pages' descriptions (beating the page header's 46rem
+// measure), in em so it grows with the text and stays on one line on wide screens.
+.top .intro {
+  max-width: 36em;
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: fig(28);
+}
+
+.models {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 48px 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// The name and count sit on the image: name bottom left, count top right.
+.model {
+  position: relative;
+  display: block;
+  text-decoration: none;
+
+  &:hover {
+    .figure svg {
+      transform: translateY(-4px);
+    }
+
+    .name {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+  }
+}
+
+.name {
+  position: absolute;
+  left: fig(14);
+  bottom: fig(10);
+  @include urn-name;
+}
+
+.count {
+  position: absolute;
+  top: fig(10);
+  right: fig(14);
+  @include label;
+}
+
+@include below($phone) {
+  .models {
+    grid-template-columns: minmax(0, 1fr);
+    gap: fig(14);
+  }
+
+  .figure {
+    aspect-ratio: 4 / 3;
+  }
+}

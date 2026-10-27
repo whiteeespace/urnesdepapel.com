@@ -1,0 +1,81 @@
+@use "mixins" as *;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  text-decoration: none;
+
+  &:hover {
+    .figure svg {
+      transform: translateY(-4px);
+    }
+
+    .name {
+      text-decoration: underline;
+      text-underline-offset: 0.2em;
+    }
+  }
+}
+
+.media {
+  position: relative;
+  display: block;
+}
+
+// The colourway sits on the image, top right, like the urn counts on the home page.
+.colour {
+  position: absolute;
+  top: fig(10);
+  right: fig(14);
+  max-width: calc(100% - #{fig(28)});
+  @include label;
+  text-align: right;
+
+  // Two cards across: smaller so most colourways stay on one line above the drawing.
+  @include below($tablet) {
+    @include above($phone) {
+      top: fig(6);
+      right: fig(8);
+      max-width: calc(100% - #{fig(16)});
+      font-size: fig(10);
+      line-height: 1.3;
+    }
+  }
+}
+
+// On narrow cards the drawing sits a little smaller and lower, leaving room for a two-line colourway.
+@include below($tablet) {
+  @include above($phone) {
+    .figure svg {
+      height: 64%;
+      translate: 0 10%;
+    }
+  }
+}
+
+.caption {
+  display: flex;
+  flex-direction: column;
+  gap: fig(4);
+}
+
+.title {
+  display: flex;
+  align-items: baseline;
+  gap: fig(8);
+}
+
+.number {
+  @include urn-number;
+}
+
+.name {
+  @include urn-name;
+}
+
+.description {
+  @include body;
+  color: var(--color-ink);
+}

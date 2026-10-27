@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "siteName": "Urnes de Papel",
+    "home": "Handmade biodegradable funeral urns",
+    "about": "About Urnes de Papel",
+    "pricing": "Pricing",
+    "artisan": "The artisan",
+    "request": "Make a request",
+    "notFound": "Page not found"
+  },
+  "nav": {
+    "label": "Main navigation",
+    "home": "Urnes de Papel, home",
+    "about": "Urnes de Papel",
+    "pricing": "Pricing",
+    "artisan": "The artisan",
+    "request": "Make a request",
+    "language": "Language",
+    "skip": "Skip to content",
+    "menu": "Menu",
+    "close": "Close"
+  },
+  "common": {
+    "collections": "collections",
+    "urnNumber": "#{number}",
+    "urnCount": "{count, plural, one {# urn} other {# urns}}",
+    "photo": "photo",
+    "toBeWritten": "Introduction to be written.",
+    "customizationOptions": "Customization options",
+    "phone": "Phone",
+    "etsy": "Etsy shop"
+  },
+  "urn": {
+    "colour": "Colour",
+    "fibres": "Fibres",
+    "materials": "Materials",
+    "basePrice": "Base price",
+    "unique": "A one-of-a-kind piece, shaped by hand. Relief and texture vary from urn to urn.",
+    "request": "Request this urn",
+    "previous": "Previous urn",
+    "next": "Next urn",
+    "views": {
+      "front": "front",
+      "detail": "detail",
+      "opening": "opening"
+    }
+  },
+  "pricing": {
+    "options": "Additional options",
+    "startRequest": "Start a request",
+    "details": "Details"
+  },
+  "request": {
+    "type": {
+      "legend": "Your request",
+      "order": "Order an urn",
+      "customize": "Customize an urn",
+      "question": "Ask a question"
+    },
+    "urn": {
+      "legend": "The urn",
+      "label": "Preferred urn",
+      "none": "I’m not sure yet, I’d like advice",
+      "view": "View details"
+    },
+    "options": {
+      "legend": "Options",
+      "requires": "Add this first: {option}."
+    },
+    "timing": {
+      "legend": "Timing",
+      "label": "Preferred date",
+      "hint": "Manufacturing lead times apply. Add a date if one matters to you."
+    },
+    "contact": {
+      "legend": "Your details",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "preference": "Best way to reach me",
+      "byEmail": "Email",
+      "byPhone": "Phone",
+      "message": "Message",
+      "messageHint": "What matters to you: a garment, a book page, a colour…"
+    },
+    "optional": "optional",
+    "required": "required",
+    "estimate": {
+      "title": "Estimate",
+      "total": "Total",
+      "basicUrn": "Basic urn",
+      "urn": "Urn {title}",
+      "empty": "Choose an urn or options to see an estimate.",
+      "note": "Indicative amount. The final price is confirmed with you."
+    },
+    "submit": "Send request",
+    "sending": "Sending…",
+    "errors": {
+      "summary": "A few fields need attention. They are marked below.",
+      "nameRequired": "Enter your name.",
+      "emailInvalid": "Enter a valid email address, like name@example.com.",
+      "phoneRequired": "Enter a phone number, or choose to be contacted by email.",
+      "messageRequired": "Write your question in the message.",
+      "server": "Your request couldn’t be sent. Try again in a moment, or call {phone}."
+    },
+    "done": {
+      "title": "Thank you, {name}.",
+      "body": "Your request has been sent. Suzanne Desbiens will reply to you personally by {via, select, phone {phone} other {email}}.",
+      "again": "New request",
+      "back": "Back to the collections"
+    }
+  },
+  "footer": {
+    "rights": "© {year} All rights reserved Urnes de papel"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "This page doesn’t exist or has moved.",
+    "back": "Back to the collections"
+  }
+}

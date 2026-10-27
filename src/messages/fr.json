@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "siteName": "Urnes de Papel",
+    "home": "Urnes funéraires biodégradables faites à la main",
+    "about": "Urnes de Papel",
+    "pricing": "Tarifs",
+    "artisan": "L’artisane",
+    "request": "Faire une demande",
+    "notFound": "Page introuvable"
+  },
+  "nav": {
+    "label": "Navigation principale",
+    "home": "Urnes de Papel, accueil",
+    "about": "Urnes de Papel",
+    "pricing": "Tarifs",
+    "artisan": "L’artisane",
+    "request": "Faire une demande",
+    "language": "Langue",
+    "skip": "Aller au contenu",
+    "menu": "Menu",
+    "close": "Fermer"
+  },
+  "common": {
+    "collections": "collections",
+    "urnNumber": "#{number}",
+    "urnCount": "{count, plural, one {# urne} other {# urnes}}",
+    "photo": "photo",
+    "toBeWritten": "Texte de présentation à rédiger.",
+    "customizationOptions": "Options de personnalisation",
+    "phone": "Téléphone",
+    "etsy": "Boutique Etsy"
+  },
+  "urn": {
+    "colour": "Couleur",
+    "fibres": "Fibres",
+    "materials": "Matériaux",
+    "basePrice": "Prix de base",
+    "unique": "Pièce unique, façonnée à la main. Les reliefs et la texture varient d’une urne à l’autre.",
+    "request": "Demander cette urne",
+    "previous": "Urne précédente",
+    "next": "Urne suivante",
+    "views": {
+      "front": "vue de face",
+      "detail": "détail",
+      "opening": "ouverture"
+    }
+  },
+  "pricing": {
+    "options": "Options supplémentaires",
+    "startRequest": "Composer une demande",
+    "details": "Détails"
+  },
+  "request": {
+    "type": {
+      "legend": "Votre demande",
+      "order": "Commander une urne",
+      "customize": "Personnaliser une urne",
+      "question": "Poser une question"
+    },
+    "urn": {
+      "legend": "L’urne",
+      "label": "Urne souhaitée",
+      "none": "Je ne sais pas encore, j’aimerais être conseillé(e)",
+      "view": "Voir la fiche"
+    },
+    "options": {
+      "legend": "Options",
+      "requires": "Ajoutez d’abord : {option}."
+    },
+    "timing": {
+      "legend": "Délai",
+      "label": "Date souhaitée",
+      "hint": "Des délais de fabrication s’appliquent. Indiquez une date si elle est importante pour vous."
+    },
+    "contact": {
+      "legend": "Vos coordonnées",
+      "name": "Nom",
+      "email": "Courriel",
+      "phone": "Téléphone",
+      "preference": "Je préfère être contacté(e) par",
+      "byEmail": "Courriel",
+      "byPhone": "Téléphone",
+      "message": "Message",
+      "messageHint": "Ce qui compte pour vous : un vêtement, une page de livre, une couleur…"
+    },
+    "optional": "facultatif",
+    "required": "obligatoire",
+    "estimate": {
+      "title": "Estimation",
+      "total": "Total",
+      "basicUrn": "Urne de base",
+      "urn": "Urne {title}",
+      "empty": "Choisissez une urne ou des options pour voir une estimation.",
+      "note": "Montant indicatif. Le prix final est confirmé avec vous."
+    },
+    "submit": "Envoyer la demande",
+    "sending": "Envoi…",
+    "errors": {
+      "summary": "Quelques champs sont à compléter. Ils sont indiqués ci-dessous.",
+      "nameRequired": "Indiquez votre nom.",
+      "emailInvalid": "Indiquez une adresse courriel valide, par exemple nom@exemple.com.",
+      "phoneRequired": "Indiquez un numéro de téléphone, ou choisissez d’être contacté(e) par courriel.",
+      "messageRequired": "Écrivez votre question dans le message.",
+      "server": "La demande n’a pas pu être envoyée. Réessayez dans un moment, ou appelez au {phone}."
+    },
+    "done": {
+      "title": "Merci, {name}.",
+      "body": "Votre demande a bien été envoyée. Suzanne Desbiens vous répondra personnellement par {via, select, phone {téléphone} other {courriel}}.",
+      "again": "Nouvelle demande",
+      "back": "Retour aux collections"
+    }
+  },
+  "footer": {
+    "rights": "© {year} Tous droits réservés Urnes de papel"
+  },
+  "notFound": {
+    "title": "Page introuvable",
+    "body": "Cette page n’existe pas ou a été déplacée.",
+    "back": "Retour aux collections"
+  }
+}

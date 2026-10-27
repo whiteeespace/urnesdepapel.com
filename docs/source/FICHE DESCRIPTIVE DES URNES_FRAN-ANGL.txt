@@ -1,0 +1,247 @@
+
+Nom de l’urne
+no
+fibres
+couleur
+matériaux
+description 
+prix de base
+
+
+français
+anglais
+français 
+anglais
+français
+anglais
+français
+anglais
+
+Anémone
+20
+Abaca blanchi, linter de coton, kozo
+Bleached abaca, cotton linter, kozo
+Gris argent
+Silver Gray
+	
+
+Lavis de pigment naturel et médium acrylique, colle de riz, colle blanche, vernis naturel à base de plante Earth Paint, poudre d’aluminium
+Natural pigment and acrylic medium washes, rice glue, white glue, Earth Paint natural plant-based varnish, aluminum powder
+Patine aspect pierre, rainures formées par l’insertion de tiges lors du moulage de l’urne.
+Patina stone-look, grooves formed by the insertion of rods at the stage of the urn’s moldage 
+
+
+350 $
+Anémone
+21
+Abaca blanchi, linter de coton, kozo
+Bleached abaca, cotton linter, kozo
+Ocre jaune
+Yellow ochre
+Papier fait main embossé, papier japonais, pigment naturel, médium acrylique, colle de riz, colle blanche, poudre de konnyaku, poudre d’or
+Handmade paper embossed, Japanese paper, natural pigment, acrylic medium, rice glue, white glue, konnyaku powder, gold powder
+Effet technique mixte : papiers embossés à motifs de dentelle et floral.  Lumière et humilité de l’ocre jaune.
+Mixed media effect: embossed papers with lace and floral patterns. Light effects and humility of the yellow ochre.
+350 $
+Tulipe
+22
+Abaca blanchi, linter de coton, kozo
+Bleached abaca, cotton linter, kozo
+Gris clair, vert pâle, blanc
+Light gray, pale green, almond white
+Appliqués de papier fait main, fibres mélangées, pigment naturel, médium acrylique, colle de riz, colle blanche, poudre de konnyaku, poudre d’or
+Appliqués of handmade paper, mixed fibers, natural pigment, acrylic medium, rice glue, white glue, konnyaku powder, gold powder
+Urne aux reflets gris perle, une texture raffinée ; apaisement et silence.
+Urn with pearl gray reflections, a refined texture; calm and silence.
+350 $
+
+
+
+
+
+
+
+
+
+
+
+Papillon
+23
+Abaca blanchi, linter de coton, kozo
+Bleached abaca, cotton linter, kozo
+Blanc neutre
+Neutral White
+Sand
+French Green
+Papier coton fait main embossé à motif floral, colle de riz, colle blanche, poudre de konnyaku
+Handmade embossed cotton paper with floral pattern, rice glue, white glue, konnyaku powder
+Une composition florale discrète et réconfortante.
+A discreet and comforting floral arrangement.
+350 $
+Anémone 
+24
+Abaca blanchi, linter de coton, kozo
+Bleached abaca, cotton linter, kozo
+Sable
+Sand
+
+Lavis pigment naturel et médium acrylique, colle de riz, colle blanche, appliqués de papier uzumaki, poudre de konnyaku
+Natural pigment and acrylic medium washes, rice glue, white glue, uzumaki paper appliqués, konnyaku powder
+Urne avec insertion d’une page d’un livre cher à la personne décédée ou un proche.  Agencement rassurant de mots, de papier fait main et d’appliqués d’uzumaki.
+Urn with insertion of a page from a book dear to the deceased or a loved one.  Reassuring arrangement of words, handmade paper and uzumaki appliqués.
+350 $
+Anémone
+26
+Abaca blanchi, linter de coton, kozo
+Bleached abaca, cotton linter, kozo
+Vert français
+French Green
+Papier fait main embossé, lavis de pigment naturel et médium acrylique, colle de riz, colle blanche, poudre de konnyaku
+Handmade embossed paper, natural pigment and acrylic medium wash, rice glue, white glue, konnyaku powder
+Sobriété, renouveau et tranquillité.
+Sobriety, renewal and tranquility.
+350 $
+Anémone
+29
+Abaca blanchi, linter de coton, kozo
+Bleached abaca, cotton linter, kozo
+Blanc chaud, vert pâle, or
+Warm white, pale green, gold
+Pigment naturel et médium acrylique, colle de riz, colle blanche, papier uzumaki, poudre de konnyaku 
+Natural pigment and acrylic medium, rice glue, white glue, uzumaki paper, konnyaku powder
+Un effet à la fois marbré et rustique. 
+A marbled and rustic effect.
+350 $
+Papillon 
+30
+Abaca blanchi, linter de coton, kozo
+Bleached abaca, cotton linter, kozo
+Blanc chaud, vert pâle, or
+Warm white, pale green, gold
+Appliqués de papier fait main, fibres mélangées, pigment naturel et médium acrylique, colle de riz, colle blanche, poudre d’or, poudre de konnyaku
+Appliqués of handmade paper, mixed fibers, natural pigment and acrylic medium, rice glue, white glue, gold powder, konnyaku powder
+Un paysage en papier : silence et apaisement. 
+A paper landscape: silence and appeasement.
+350 $
+Tulipe
+35
+Abaca brut, coton textile
+Raw abaca, textile cotton
+Blanc amande, vert
+Almond white, green
+
+
+Appliqués de papier fait main, fibres de coton, colle de riz, squelettes de feuilles séchés, fil de papier, poudre de konnyaku
+Appliqués of handmade paper, cotton fiber, rice glue, dried leaf skeletons, paper yarn, konnyaku powder
+Effet de légèreté d’un envol ?
+Effect of the lightness of wings spreading ?
+350 $
+
+
+
+
+
+
+
+
+
+
+
+Anémone
+36
+Abaca brut, coton textile, lin, chanvre
+Raw abaca, textile cotton, flax, hemp
+Gris chaud
+Warm gray
+
+Papier fait de lin et de chanvre embossé avec un motif floral, colle de riz, colle blanche, poudre de konnyaku
+Paper made of linen and hemp embossed with a floral pattern, rice glue, white glue, konnyaku powder
+Aspect rustique et floral ; la solidité des fibres de lin et de chanvre de notre territoire.
+Rustic and floral appearance; the strength of flax and hemp fibers from our territory.
+350 $
+Anémone
+37
+Abaca blanchi, linter de coton, kozo, tiges de vigne
+Bleached abaca, cotton linter, kozo, vine stalks
+
+Blanc chaud, brun
+Warm white, brown
+Papier fait main de coton embossé à motif floral, tiges de vigne, colle de riz, colle blanche, poudre de konnyaku
+Handmade embossed cotton paper with floral pattern, vine stalks, rice glue, white glue, konnyaku powder
+Délicatesse et blancheur du motif floral embossé et présence de la tige de vigne brute.  Douceur et solidité.
+Delicacy and whiteness of the embossed floral pattern and presence of the raw vine stem. Softness and strength.
+350 $
+Papillon
+38
+Abaca brut, coton textile, asclépiade
+Raw abaca, textile cotton, milkweed
+Ocre jaune pâle
+Pale yellow ochre
+
+Appliqués de papier fait main à base de duvet d’asclépiade, colle de riz, colle blanche, poudre de konnyaku
+Appliqués of handmade paper made from milkweed down, rice glue, white glue, konnyaku powder
+Des fleurs d’asclépiades embossées sur un papier fait à partir de fibres de cette plante amie des monarques.
+Milkweed flowers embossed on paper made from the fibers of this monarch-friendly plant.
+350 $
+Anémone
+42
+Abaca brut, coton textile, tissus de jeans, linter de jeans
+Raw abaca, textile cotton, denim fabrics, denim linter
+Bleu pâle
+Pale blue
+Appliqués de papier fait main à partir de tissus de jeans, fil à coudre, colle de riz, colle blanche, poudre de konnyaku
+Hand-made paper appliqués from denim, sewing thread, rice glue, white glue, konnyaku powder
+
+Une couleur provenant de la pulpe de jeans ayant appartenu à la personne décédée.  Les fibres de jeans personnalisent cette urne bleue pâle. 
+A color derived from the pulp of jeans that belonged to the deceased. The denim fibers personalize this pale blue urn.
+350 $
+Tulipe 
+43
+Abaca brut, coton textile
+Raw abaca, textile cotton
+Blanc neutre, vert, gris pâle, or
+Neutral white, green, pale gray, gold
+Appliqués de papier fait main, fibres mélangées, pigment naturel et médium acrylique, colle de riz, colle blanche, poudre d’or, papier papier japonais sunome silver, poudre de konnyaku 
+Appliqués of handmade paper, mixed fibers, natural pigment and acrylic medium, rice glue, white glue,sunome silver Japanese paper, gold powder, konnyaku powder
+Urne aux reflets gris perle, une texture raffinée ; apaisement et silence.
+Urn with pearl gray reflections, a refined texture; calm and silence.
+350 $
+
+
+
+
+
+
+
+
+
+
+
+Tulipe
+44
+Abaca brut, coton textile, asclépiade
+Raw abaca, textile cotton, milkweed
+Jaune ocre pâle
+Pale yellow ochre
+
+Appliqués de papier fait main à base de duvet d’asclépiade, papier uzumaki, colle de riz, colle blanche, poudre de konnyaku
+Hand-made paper appliqués made from milkweed down, uzumaki paper, rice glue, white glue, konnyaku powder
+
+
+
+Des fleurs d’asclépiades embosses dans un papier fait à partir de fibres de cette plante amie des monarques.
+Milkweed flowers embossed on paper made from the fibers of this monarch-friendly plant.
+350 $
+
+
+
+
+
+
+
+
+
+
+
+
+

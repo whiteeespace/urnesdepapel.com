@@ -1,0 +1,53 @@
+@use "mixins" as *;
+
+// The founding statement under the title.
+.statement {
+  @include description;
+}
+
+// Mission, urns and personalisation side by side, each starting at the same height.
+.sections {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 48px clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1em;
+  min-width: 0;
+
+  p {
+    @include body;
+    margin: 0;
+    hyphens: auto;
+  }
+}
+
+// Introduced by a short gold line of fibres, like the notes.
+.heading {
+  @include heading;
+  display: flex;
+  flex-direction: column;
+  gap: fig(10);
+  margin: 0 0 0.25em;
+  font-size: fig(18);
+  line-height: 1.3;
+
+  &::before {
+    content: "";
+    width: fig(28);
+    height: fig(6);
+    color: var(--color-gold);
+    @include fibres;
+  }
+}
+
+@include below($tablet) {
+  .sections {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

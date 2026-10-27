@@ -1,0 +1,7 @@
+.next/
+node_modules/
+design/
+src/payload-types.ts
+src/app/(payload)/
+src/migrations/
+src/components/Logo/paths.ts

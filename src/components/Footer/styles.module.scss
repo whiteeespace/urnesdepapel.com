@@ -1,0 +1,25 @@
+.inner {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  padding-block: 8px 40px;
+  font-family: var(--font-label);
+  font-size: 0.875rem;
+  color: var(--color-muted);
+
+  a {
+    color: var(--color-ink-80);
+  }
+}
+
+.contact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+}
+
+// Kept whole rather than breaking at its hyphens.
+.phone {
+  white-space: nowrap;
+}

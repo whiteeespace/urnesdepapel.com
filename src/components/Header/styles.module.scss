@@ -1,0 +1,311 @@
+@use "mixins" as *;
+
+// A slim bar that stays at the top while the page scrolls under it.
+.header {
+  --logo-h: 76px;
+  --pad-top: 8px;
+  --header-h: 92px;
+
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  height: var(--header-h);
+  background: transparent;
+  // The page shows through, so only the logo and links take clicks; the rest of the band
+  // lets clicks reach the content scrolling underneath.
+  pointer-events: none;
+
+  .skip,
+  .home,
+  .nav {
+    pointer-events: auto;
+  }
+
+  @include below($nav) {
+    --logo-h: 60px;
+    --pad-top: 6px;
+    --header-h: 72px;
+  }
+
+  // With the phone menu open the bar turns to paper, so the page no longer shows behind it.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--paper-texture), var(--color-paper);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:has([aria-expanded="true"])::before {
+    opacity: 1;
+  }
+}
+
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: -100px;
+  z-index: 30;
+  padding: 10px 14px;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  @include nav-link;
+
+  &:focus {
+    top: 10px;
+  }
+}
+
+// The logo is placed on its own; the navigation sits at the top right. The phone menu
+// panel is positioned against this box.
+.inner {
+  position: relative;
+  height: 100%;
+  max-width: var(--content-width);
+  margin-inline: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px))
+    max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+
+.home {
+  position: absolute;
+  z-index: 1;
+  top: var(--pad-top);
+  left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  color: var(--color-ink-80);
+  transition: color 0.3s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-gold);
+  }
+}
+
+// The U and its fibres only.
+.logo {
+  height: var(--logo-h);
+  width: auto;
+}
+
+// Centred in the bar, on the right.
+.nav {
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+}
+
+// The side padding is pulled back into the gutter so the word lines up with the page edge;
+// it only shows on keyboard focus, which fills the button gold like the request link.
+.menuButton {
+  display: none;
+  margin-inline-end: calc(#{fig(8)} * -1);
+  padding: fig(2) fig(8);
+  background: none;
+  border: 0;
+  color: var(--color-ink-80);
+  cursor: pointer;
+  @include nav-link;
+
+  &:focus-visible {
+    outline: none;
+    background: var(--color-gold);
+    color: var(--color-paper);
+  }
+}
+
+.panel {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 14px 30px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  @include nav-link;
+  position: relative;
+  color: var(--color-ink-80);
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  // The current page stays gold, like the logo on hover.
+  &[aria-current="page"] {
+    color: var(--color-gold);
+  }
+
+  // On hover the fibres draw in under the word, left to right like a pen stroke.
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: calc(100% + 1px);
+    width: 100%;
+    height: 0.4em;
+    pointer-events: none;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    @include fibres;
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    clip-path: inset(0);
+  }
+}
+
+.request {
+  padding: fig(4) fig(8);
+
+  // The filled button has its own hover, so no fibres under it.
+  &::after {
+    content: none;
+  }
+  background: var(--color-gold);
+  color: var(--color-paper);
+
+  &:hover,
+  &[aria-current="page"] {
+    color: var(--color-paper);
+    background: var(--color-gold-ink);
+  }
+}
+
+.locales {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  @include nav-link;
+  color: var(--color-muted);
+}
+
+.localeItem {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.locale {
+  font: inherit;
+  color: var(--color-ink-80);
+  background: none;
+  border: 0;
+  padding: 2px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-gold);
+  }
+
+  &[aria-pressed="true"] {
+    color: var(--color-muted);
+  }
+}
+
+@include below($nav) {
+  .menuButton {
+    display: block;
+  }
+
+  // Drops down under the header, unrolling from the top; the links follow one after another.
+  .panel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 36px;
+    padding: 20px max(var(--gutter), env(safe-area-inset-left, 0px)) 32px;
+    // Continues the bar's paper without a seam.
+    background: var(--paper-texture), var(--color-paper);
+    background-position: 0 calc(var(--header-h) * -1);
+    box-shadow: 0 28px 32px -28px rgb(42 41 38 / 0.12);
+    clip-path: inset(0 0 -60px 0);
+    transition:
+      clip-path 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 0s;
+
+    &[data-open="false"] {
+      visibility: hidden;
+      clip-path: inset(0 0 100% 0);
+      transition:
+        clip-path 0.3s cubic-bezier(0.55, 0, 0.75, 0.2),
+        visibility 0s linear 0.3s;
+    }
+  }
+
+  .links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: fig(12);
+  }
+
+  .links > li,
+  .locales {
+    transition:
+      opacity 0.35s ease,
+      translate 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+
+    [data-open="false"] & {
+      opacity: 0;
+      translate: 0 -8px;
+      transition-duration: 0.15s;
+      transition-delay: 0s;
+    }
+  }
+
+  @for $i from 1 through 4 {
+    .links > li:nth-child(#{$i}) {
+      transition-delay: #{0.05s + $i * 0.04s};
+    }
+  }
+
+  .locales {
+    transition-delay: 0.26s;
+  }
+
+  // Set like the collection names, much larger than the inline links.
+  .link {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: fig(26);
+    line-height: 1.3;
+  }
+
+  .request {
+    display: inline-block;
+    margin-top: fig(8);
+    padding: fig(2) fig(12) fig(4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header::before,
+  .panel,
+  .panel[data-open="false"],
+  .links > li,
+  .locales,
+  .link::after {
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}

@@ -1,0 +1,106 @@
+:root {
+  /* Brand (Pinabel 2014): PMS 617U gold and Noir 80 % */
+  --color-paper: #f7f4ed;
+  --color-ink: #2a2926;
+  --color-ink-80: #58585a;
+  --color-muted: #7f7c74;
+  --color-field: #cfcbc1;
+  --color-placeholder: #f1efea;
+  --color-gold: #bbb276;
+  --color-gold-ink: #85783f;
+  --color-error: #9a3a2c;
+
+  /* Handmade-paper surface (seamless tile, drawn at half size for sharp retina) */
+  --paper-texture: url("/textures/paper.jpg") 0 0 / 768px 768px;
+
+  /* Fonts: serif for titles and headings, sans for text and UI, 42dot Sans for labels */
+  --font-serif: var(--font-source-serif), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-hanken), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-label: var(--font-42dot), var(--font-sans);
+  /* Titles: capitals drawn from the logo; digits and rare signs fall back to the serif */
+  --font-titling: var(--font-urnes-titling), var(--font-serif);
+
+  /* Layout */
+  /* Uses the full width of laptops and most desktops; only very wide screens get margins. */
+  --content-width: 1800px;
+  --gutter: clamp(24px, 4vw, 64px);
+  --section-gap: clamp(56px, 8vw, 104px);
+
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper-texture), var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+p,
+figure,
+dl,
+dd {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
+  text-wrap: balance;
+}
+
+a {
+  color: var(--color-ink);
+  text-underline-offset: 0.2em;
+}
+
+::placeholder {
+  color: var(--color-muted);
+  opacity: 1;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold-ink);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
