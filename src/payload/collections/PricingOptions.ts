@@ -40,6 +40,18 @@ export const PricingOptions: CollectionConfig = {
       label: { fr: "Description", en: "Description" },
     },
     {
+      name: "summary",
+      type: "text",
+      localized: true,
+      label: { fr: "Description courte", en: "Short description" },
+      admin: {
+        description: {
+          fr: "Une ligne pour le formulaire de demande. La description complète reste sur la page des tarifs.",
+          en: "One line for the request form. The full description stays on the pricing page.",
+        },
+      },
+    },
+    {
       type: "row",
       fields: [
         {

@@ -51,47 +51,61 @@
     "details": "Details"
   },
   "request": {
+    "progress": "Step {current} of {total}",
+    "next": "Continue",
+    "skip": "Skip",
+    "back": "Back",
+    "steps": {
+      "type": "Request",
+      "model": "Model",
+      "urn": "Colour",
+      "options": "Options",
+      "timing": "Date",
+      "contact": "Contact"
+    },
     "type": {
-      "legend": "Your request",
+      "title": "What would you like to do?",
       "order": "Order an urn",
-      "customize": "Customize an urn",
-      "question": "Ask a question"
+      "orderHint": "Choose an urn, and personalize it if you wish.",
+      "question": "Ask a question",
+      "questionHint": "Write to Suzanne, with no commitment."
+    },
+    "model": {
+      "title": "Which model draws you in?",
+      "count": "{count, plural, one {# colour} other {# colours}}",
+      "none": "I’m not sure yet",
+      "noneHint": "Suzanne will advise you based on your tastes."
     },
     "urn": {
-      "legend": "The urn",
-      "label": "Preferred urn",
-      "none": "I’m not sure yet, I’d like advice",
-      "view": "View details"
+      "title": "Which colour do you prefer?"
     },
     "options": {
-      "legend": "Options",
-      "requires": "Add this first: {option}."
+      "title": "Would you like to personalize it?",
+      "hint": "Optional. Choose as many as you like."
     },
     "timing": {
-      "legend": "Timing",
+      "title": "Do you have a date in mind?",
       "label": "Preferred date",
-      "hint": "Manufacturing lead times apply. Add a date if one matters to you."
+      "previousMonth": "Previous month",
+      "nextMonth": "Next month"
     },
     "contact": {
-      "legend": "Your details",
+      "title": "How can we reach you?",
+      "intro": "Suzanne will reply to you personally.",
       "name": "Name",
       "email": "Email",
       "phone": "Phone",
-      "preference": "Best way to reach me",
-      "byEmail": "Email",
-      "byPhone": "Phone",
-      "message": "Message",
-      "messageHint": "What matters to you: a garment, a book page, a colour…"
+      "message": "Message"
     },
     "optional": "optional",
     "required": "required",
+    "summary": {
+      "noUrn": "Urn to choose with Suzanne",
+      "date": "For {date}"
+    },
     "estimate": {
       "title": "Estimate",
-      "total": "Total",
-      "basicUrn": "Basic urn",
-      "urn": "Urn {title}",
-      "empty": "Choose an urn or options to see an estimate.",
-      "note": "Indicative amount. The final price is confirmed with you."
+      "note": "The final price is confirmed with you."
     },
     "submit": "Send request",
     "sending": "Sending…",
@@ -99,13 +113,12 @@
       "summary": "A few fields need attention. They are marked below.",
       "nameRequired": "Enter your name.",
       "emailInvalid": "Enter a valid email address, like name@example.com.",
-      "phoneRequired": "Enter a phone number, or choose to be contacted by email.",
       "messageRequired": "Write your question in the message.",
       "server": "Your request couldn’t be sent. Try again in a moment, or call {phone}."
     },
     "done": {
       "title": "Thank you, {name}.",
-      "body": "Your request has been sent. Suzanne Desbiens will reply to you personally by {via, select, phone {phone} other {email}}.",
+      "body": "Your request has been sent. Suzanne Desbiens will reply to you personally.",
       "again": "New request",
       "back": "Back to the collections"
     }

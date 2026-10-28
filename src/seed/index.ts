@@ -30,6 +30,7 @@ interface CatalogueOption {
   priceMax?: number;
   name: Localized;
   description: Localized;
+  summary?: Localized;
 }
 interface Catalogue {
   urns: CatalogueUrn[];
@@ -105,11 +106,12 @@ const seed = async () => {
       {
         name: option.name.fr,
         description: option.description.fr,
+        summary: option.summary?.fr,
         priceMin: option.price ?? option.priceMin,
         priceMax: option.priceMax ?? null,
         order: index + 1,
       },
-      { name: option.name.en, description: option.description.en }
+      { name: option.name.en, description: option.description.en, summary: option.summary?.en }
     );
     optionIds[option.slug] = doc.id;
   }

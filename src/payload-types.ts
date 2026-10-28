@@ -265,6 +265,10 @@ export interface PricingOption {
   id: number;
   name: string;
   description?: string | null;
+  /**
+   * One line for the request form. The full description stays on the pricing page.
+   */
+  summary?: string | null;
   priceMin: number;
   /**
    * Only for a range, e.g. $50–75.
@@ -456,6 +460,7 @@ export interface ModelsSelect<T extends boolean = true> {
 export interface PricingOptionsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
+  summary?: T;
   priceMin?: T;
   priceMax?: T;
   requires?: T;

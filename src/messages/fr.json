@@ -51,47 +51,61 @@
     "details": "Détails"
   },
   "request": {
+    "progress": "Étape {current} sur {total}",
+    "next": "Continuer",
+    "skip": "Passer",
+    "back": "Retour",
+    "steps": {
+      "type": "Demande",
+      "model": "Modèle",
+      "urn": "Couleur",
+      "options": "Options",
+      "timing": "Date",
+      "contact": "Coordonnées"
+    },
     "type": {
-      "legend": "Votre demande",
+      "title": "Que souhaitez-vous faire ?",
       "order": "Commander une urne",
-      "customize": "Personnaliser une urne",
-      "question": "Poser une question"
+      "orderHint": "Choisir une urne et, si vous le souhaitez, la personnaliser.",
+      "question": "Poser une question",
+      "questionHint": "Écrire à Suzanne, sans engagement."
+    },
+    "model": {
+      "title": "Quel modèle vous attire ?",
+      "count": "{count, plural, one {# couleur} other {# couleurs}}",
+      "none": "Je ne sais pas encore",
+      "noneHint": "Suzanne vous conseillera selon vos goûts."
     },
     "urn": {
-      "legend": "L’urne",
-      "label": "Urne souhaitée",
-      "none": "Je ne sais pas encore, j’aimerais être conseillé(e)",
-      "view": "Voir la fiche"
+      "title": "Quelle couleur préférez-vous ?"
     },
     "options": {
-      "legend": "Options",
-      "requires": "Ajoutez d’abord : {option}."
+      "title": "Souhaitez-vous la personnaliser ?",
+      "hint": "Facultatif. Choisissez-en autant que vous le souhaitez."
     },
     "timing": {
-      "legend": "Délai",
+      "title": "Avez-vous une date en tête ?",
       "label": "Date souhaitée",
-      "hint": "Des délais de fabrication s’appliquent. Indiquez une date si elle est importante pour vous."
+      "previousMonth": "Mois précédent",
+      "nextMonth": "Mois suivant"
     },
     "contact": {
-      "legend": "Vos coordonnées",
+      "title": "Comment vous joindre ?",
+      "intro": "Suzanne vous répondra personnellement.",
       "name": "Nom",
       "email": "Courriel",
       "phone": "Téléphone",
-      "preference": "Je préfère être contacté(e) par",
-      "byEmail": "Courriel",
-      "byPhone": "Téléphone",
-      "message": "Message",
-      "messageHint": "Ce qui compte pour vous : un vêtement, une page de livre, une couleur…"
+      "message": "Message"
     },
     "optional": "facultatif",
     "required": "obligatoire",
+    "summary": {
+      "noUrn": "Urne à choisir avec Suzanne",
+      "date": "Pour le {date}"
+    },
     "estimate": {
       "title": "Estimation",
-      "total": "Total",
-      "basicUrn": "Urne de base",
-      "urn": "Urne {title}",
-      "empty": "Choisissez une urne ou des options pour voir une estimation.",
-      "note": "Montant indicatif. Le prix final est confirmé avec vous."
+      "note": "Le prix final est confirmé avec vous."
     },
     "submit": "Envoyer la demande",
     "sending": "Envoi…",
@@ -99,13 +113,12 @@
       "summary": "Quelques champs sont à compléter. Ils sont indiqués ci-dessous.",
       "nameRequired": "Indiquez votre nom.",
       "emailInvalid": "Indiquez une adresse courriel valide, par exemple nom@exemple.com.",
-      "phoneRequired": "Indiquez un numéro de téléphone, ou choisissez d’être contacté(e) par courriel.",
       "messageRequired": "Écrivez votre question dans le message.",
       "server": "La demande n’a pas pu être envoyée. Réessayez dans un moment, ou appelez au {phone}."
     },
     "done": {
       "title": "Merci, {name}.",
-      "body": "Votre demande a bien été envoyée. Suzanne Desbiens vous répondra personnellement par {via, select, phone {téléphone} other {courriel}}.",
+      "body": "Votre demande a bien été envoyée. Suzanne Desbiens vous répondra personnellement.",
       "again": "Nouvelle demande",
       "back": "Retour aux collections"
     }

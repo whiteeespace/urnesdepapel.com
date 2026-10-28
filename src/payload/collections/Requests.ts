@@ -30,7 +30,6 @@ const notifyStudio: CollectionAfterChangeHook = async ({ doc, operation, req }) 
       `Nom : ${doc.name}`,
       `Courriel : ${doc.email}`,
       `Téléphone : ${doc.phone || "—"}`,
-      `Contact préféré : ${doc.contactPreference === "phone" ? "téléphone" : "courriel"}`,
       `Date souhaitée : ${doc.preferredDate ? String(doc.preferredDate).slice(0, 10) : "—"}`,
       `Langue : ${doc.locale}`,
       "",
