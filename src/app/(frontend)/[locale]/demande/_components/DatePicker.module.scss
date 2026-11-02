@@ -1,0 +1,193 @@
+@use "mixins" as *;
+
+// A compact calendar card in the form's colours: square corners, month names in the sans, the chosen
+// day in ink. Days are wider than tall, so six weeks take little height.
+.root {
+  width: fit-content;
+  max-width: 100%;
+  padding: 12px 18px 14px;
+  border: 1px solid var(--color-field);
+  background: var(--color-paper);
+}
+
+.months {
+  position: relative;
+  display: flex;
+  gap: 40px;
+}
+
+// Previous and next sit at the top right, level with the month names.
+.nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  gap: 4px;
+}
+
+.navButton {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid var(--color-field);
+  background: none;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-ink-80);
+    background: var(--color-placeholder);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+}
+
+.chevron {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.month {
+  min-width: 0;
+}
+
+.caption {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  margin-bottom: 4px;
+}
+
+.captionLabel {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: fig(13);
+  line-height: 1.4;
+  color: var(--color-ink);
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.grid {
+  border-collapse: collapse;
+}
+
+.weekday {
+  width: 42px;
+  height: 24px;
+  padding: 0;
+  font-family: var(--font-label);
+  font-weight: 400;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+.day {
+  width: 42px;
+  height: 32px;
+  padding: 1px;
+  text-align: center;
+}
+
+.dayButton {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  background: none;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: fig(12);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-ink-80);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 1px;
+  }
+}
+
+// Today is underlined.
+.today .dayButton {
+  text-decoration: underline;
+  text-decoration-color: var(--color-ink-80);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35em;
+}
+
+.selected .dayButton {
+  border-color: var(--color-ink);
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+.disabled .dayButton {
+  color: var(--color-muted);
+  opacity: 0.4;
+  text-decoration: none;
+  cursor: default;
+}
+
+.outside,
+.hidden {
+  visibility: hidden;
+}
+
+// One month on phones, the cells shrinking to fit.
+@include below($phone) {
+  .root {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .month + .month {
+    display: none;
+  }
+
+  .month,
+  .grid {
+    width: 100%;
+  }
+
+  .weekday,
+  .day {
+    width: auto;
+  }
+
+  .day {
+    height: auto;
+  }
+
+  .dayButton {
+    display: block;
+    max-width: 44px;
+    height: 38px;
+    margin-inline: auto;
+  }
+}

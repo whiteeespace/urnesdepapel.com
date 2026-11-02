@@ -21,15 +21,6 @@ const page = (slug: string, label: GlobalConfig["label"], fields: Field[]): Glob
 
 export const HomePage = page("home-page", { fr: "Accueil", en: "Home" }, [
   { name: "intro", type: "textarea", localized: true, label: { fr: "Introduction", en: "Introduction" } },
-  {
-    name: "values",
-    type: "array",
-    label: { fr: "Valeurs", en: "Values" },
-    maxRows: 4,
-    fields: [
-      { name: "label", type: "text", required: true, localized: true, label: { fr: "Texte", en: "Text" } },
-    ],
-  },
 ]);
 
 export const AboutPage = page(

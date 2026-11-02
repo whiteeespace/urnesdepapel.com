@@ -1,33 +1,328 @@
-@use "sass:math";
 @use "mixins" as *;
 
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
-  gap: clamp(28px, 5vw, 64px);
-  align-items: start;
+// One question at a time under the steps, across the page's width like the other pages' content. It
+// takes the height left on the screen, so Back and Continue sit at the bottom of it.
+.wrap {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  // Clears the sticky header when a new question scrolls back to the top.
+  scroll-margin-top: 112px;
+}
+
+// Steps: a hairline per question, darkened once reached, with its number and name underneath in the
+// nav's sans.
+.steps {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stepItem {
+  flex: 1;
+  min-width: 0;
+}
+
+.stepLink {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 0 0;
+  border: 0;
+  border-top: 2px solid var(--color-field);
+  background: none;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: fig(11);
+  line-height: 1.4;
+  text-align: left;
+  color: var(--color-muted);
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+
+  .stepDone & {
+    border-top-color: var(--color-ink-80);
+    color: var(--color-ink-80);
+  }
+
+  .stepCurrent & {
+    border-top-color: var(--color-ink);
+    color: var(--color-ink);
+  }
+}
+
+button.stepLink {
+  cursor: pointer;
+
+  &:hover .stepName {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+}
+
+.stepNumber {
+  font-variant-numeric: tabular-nums;
+}
+
+.stepName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .form {
   display: flex;
+  flex: 1;
   flex-direction: column;
-  gap: 52px;
+}
+
+.step {
+  flex: 1;
+  animation: rise 0.35s ease both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 .fieldset {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   min-width: 0;
   margin: 0;
   padding: 0;
   border: 0;
 }
 
-.legend {
-  padding: 0;
-  margin-bottom: fig(4);
-  @include heading;
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: clamp(28px, 3.5vw, 48px) 0 clamp(8px, 1vw, 12px);
+}
+
+// Each question is set like the description under other pages' titles.
+.question {
+  @include description;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.lead {
+  @include body;
+  max-width: 40rem;
+  color: var(--color-muted);
+}
+
+// Answers
+
+// Every answer gets the same width and the height of the tallest one.
+.choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 12px;
+}
+
+.choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding: 18px 20px 18px 16px;
+  border: 1px solid var(--color-field);
+  background: var(--color-paper);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-ink-80);
+  }
+
+  &:has(.input:checked) {
+    border-color: var(--color-ink);
+    box-shadow: inset 0 0 0 1px var(--color-ink);
+  }
+
+  &:has(.input:focus-visible) {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  // Cards without a picture keep the same height as those with one.
+  &:not(:has(.icon)) {
+    min-height: 78px;
+    padding-left: 20px;
+  }
+}
+
+// Personalizations: the tick box and price line up with the name on the first line.
+.option {
+  align-items: flex-start;
+  padding-left: 16px;
+
+  .box {
+    margin-top: 4px;
+  }
+}
+
+.disabled {
+  border-style: dashed;
+  background: none;
+  cursor: not-allowed;
+
+  &:hover {
+    border-color: var(--color-field);
+    background: none;
+  }
+
+  .box,
+  .choiceTitle,
+  .hint,
+  .aside {
+    opacity: 0.45;
+  }
+}
+
+// The native control stays in the card for keyboards and screen readers; the card shows its state.
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.icon {
+  flex: none;
+  width: 44px;
+  overflow: hidden;
+}
+
+.choiceText {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.choiceTitle {
+  @include value;
+  font-size: fig(13);
+  line-height: 1.4;
+}
+
+.hint {
+  display: block;
+  @include hint;
+  line-height: 1.5;
+}
+
+.aside {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-end;
+  @include price;
+  font-size: fig(12);
+  line-height: 1.5;
+}
+
+// Checkbox drawn as a small square that fills when ticked.
+.box {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--color-ink-80);
+  background: var(--color-paper);
+  color: transparent;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+
+  .choice:has(.input:checked) & {
+    border-color: var(--color-ink);
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+}
+
+.tick {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.reveal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: rise 0.3s ease both;
+}
+
+.chosen {
+  color: var(--color-ink);
+}
+
+// Contact details
+
+.summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 12px 16px 12px 12px;
+  background: var(--color-placeholder);
+}
+
+// The chosen options and date, on one line separated by dots (one per line on phones).
+.summaryItems > span + span::before {
+  content: " · ";
+}
+
+// The estimate and its caveat on the right of the summary.
+.summaryEstimate {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+  text-align: right;
+}
+
+// Contact details sit closer together so the whole step fits on one screen.
+.contact {
+  gap: 16px;
+
+  .head {
+    margin-top: clamp(28px, 4vw, 44px);
+  }
 }
 
 .field {
@@ -38,12 +333,11 @@
 }
 
 .label {
-  @include field-label;
-}
-
-.hint {
-  display: block;
-  @include hint;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: fig(12);
+  line-height: 1.6;
+  color: var(--color-ink-80);
 }
 
 .optional {
@@ -51,17 +345,17 @@
 }
 
 .required {
-  color: var(--color-gold-ink);
+  color: var(--color-ink-80);
 }
 
 .error {
   @include error;
 }
 
-.input {
+.text {
   width: 100%;
   max-width: 100%;
-  padding: fig(6) fig(8);
+  padding: fig(8) fig(10);
   font-family: var(--font-sans);
   font-size: fig(12);
   line-height: 1.5;
@@ -69,6 +363,13 @@
   background: var(--color-paper);
   border: 1px solid var(--color-field);
   border-radius: 0;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-ink-80);
+  }
 
   &:focus {
     outline: none;
@@ -81,129 +382,15 @@
   }
 }
 
-.date {
-  max-width: 16rem;
-}
-
 .textarea {
-  min-height: 130px;
-  line-height: 1.5;
+  min-height: 84px;
   resize: vertical;
 }
 
-.two {
+.three {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.chip {
-  position: relative;
-
-  input {
-    position: absolute;
-    inset: 0;
-    margin: 0;
-    opacity: 0;
-    cursor: pointer;
-  }
-
-  span {
-    display: block;
-    padding: fig(6) fig(16);
-    border: 1px solid var(--color-field);
-    font-family: var(--font-sans);
-    font-weight: 700;
-    font-size: fig(12);
-    color: var(--color-ink-80);
-    cursor: pointer;
-  }
-
-  input:checked + span {
-    background: var(--color-ink);
-    border-color: var(--color-ink);
-    color: var(--color-paper);
-  }
-
-  input:focus-visible + span {
-    outline: 2px solid var(--color-gold-ink);
-    outline-offset: 2px;
-  }
-}
-
-.preview {
-  display: grid;
-  grid-template-columns: 64px minmax(0, 1fr);
-  gap: 14px;
-  align-items: center;
-
-  p {
-    @include body;
-  }
-}
-
-.checks {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.check {
-  display: grid;
-  grid-template-columns: 20px minmax(0, 1fr) auto;
-  gap: 12px;
-  align-items: start;
-  cursor: pointer;
-
-  input {
-    width: 18px;
-    height: 18px;
-    margin: 3px 0 0;
-    accent-color: var(--color-ink);
-  }
-}
-
-.locked {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.checkName {
-  display: block;
-  @include value;
-}
-
-.checkPrice {
-  @include price;
-  font-size: fig(12);
-  line-height: math.div(24.8, 12);
-}
-
-.radios {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 22px;
-  @include body;
-
-  label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-  }
-
-  input {
-    width: 16px;
-    height: 16px;
-    margin: 0;
-    accent-color: var(--color-ink);
-  }
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px 20px;
 }
 
 .honeypot {
@@ -214,109 +401,167 @@
   overflow: hidden;
 }
 
-.submit {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.inlineEstimate {
-  @include price;
-}
-
 .alert {
   padding: fig(6) fig(10);
   border: 1px solid var(--color-error);
   @include error;
 }
 
-// Stays in view while the form scrolls.
-.estimate {
-  position: sticky;
-  top: 24px;
+// Pinned to the bottom of the form by the step above it, which takes up the spare height.
+.footer {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 28px;
-  background: var(--color-placeholder);
-}
-
-.lines {
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  gap: 10px;
-
-  li {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    @include value;
-  }
-}
-
-.amount {
-  @include price;
-  font-size: fig(12);
-  line-height: inherit;
-}
-
-.total {
-  display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: baseline;
-  gap: 12px;
-  @include heading;
+  gap: 16px;
+  min-height: 44px;
+  margin-top: 24px;
+}
+
+.footerEnd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px 24px;
+}
+
+.estimate {
+  @include hint;
+  font-size: fig(12);
 
   strong {
     @include price;
-    font-size: fig(18);
+    margin-left: 6px;
   }
 }
 
-.note {
-  @include note;
+.back {
+  padding: 8px 0;
+  white-space: nowrap;
+  border: 0;
+  background: none;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: fig(12);
+  color: var(--color-muted);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-ink);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
 }
+
+// Sent
 
 .done {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  align-items: center;
+  gap: 20px;
   max-width: 40rem;
+  margin: clamp(40px, 7vw, 72px) auto 0;
+  text-align: center;
+  animation: rise 0.35s ease both;
 }
 
-// A message under the page title, so it stays in the serif.
+.doneMark {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--color-ink);
+  color: var(--color-paper);
+
+  .tick {
+    width: 24px;
+    height: 24px;
+  }
+}
+
 .doneTitle {
-  @include heading;
-  font-size: fig(24);
-  line-height: 1.3;
+  @include description;
 }
 
 .doneBody {
-  @include lede;
+  @include body;
+  color: var(--color-ink-80);
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
   gap: 14px 22px;
 }
 
-@include below($tablet) {
-  .layout {
+@include below($phone) {
+  .choices,
+  .three {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  // One answer per row, so each card can take its own height.
+  .choices {
+    grid-auto-rows: auto;
+  }
+
+  // The estimate takes its own line above Back and Continue.
+  .footer {
+    flex-wrap: wrap;
+    row-gap: 16px;
+  }
+
+  .footerEnd {
+    display: contents;
   }
 
   .estimate {
-    position: static;
+    display: flex;
+    flex-basis: 100%;
+    justify-content: space-between;
+    align-items: baseline;
+    order: -1;
   }
-}
 
-@include below($phone) {
-  .two {
-    grid-template-columns: minmax(0, 1fr);
+  // The urn and its options at the top, each option on its own line, then the estimate under a
+  // rule with the amount on the right.
+  .summary {
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .summaryItems > span {
+    display: block;
+
+    + span::before {
+      content: none;
+    }
+  }
+
+  .summaryEstimate {
+    flex-basis: 100%;
+    align-items: stretch;
+    gap: 4px;
+    margin-left: 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--color-field);
+    text-align: left;
+  }
+
+  // Only the current step keeps its name on phones, and the room to show it.
+  .stepCurrent {
+    flex: 4;
+  }
+
+  .stepItem:not(.stepCurrent) .stepName {
+    display: none;
   }
 }

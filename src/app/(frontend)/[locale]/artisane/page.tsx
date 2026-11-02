@@ -44,7 +44,7 @@ const ArtisanPage = async ({ params }: Props) => {
           priority
           className={styles.portrait}
         />
-        <section className={styles.bio}>
+        <section className={styles.bio} data-reveal>
           {page.name && <h2 className={styles.name}>{page.name}</h2>}
           <div className={styles.columns}>
             <Paragraphs text={page.bio} />

@@ -1,5 +1,6 @@
-@use "mixins" as *;
-
-.intro {
-  @include description;
+// The page fills the screen (see Page's fill), with the form taking whatever height is left, so Back
+// and Continue sit near the bottom of the screen. Less padding under them than other pages, so each
+// step fits on one screen. Doubled to outrank the page's own padding.
+.page.page {
+  padding-bottom: clamp(24px, 3vw, 40px);
 }

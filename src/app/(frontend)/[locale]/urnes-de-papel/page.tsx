@@ -30,7 +30,7 @@ const AboutPage = async ({ params }: Props) => {
   const [t, about] = await Promise.all([getTranslations("common"), getPage("about-page", locale)]);
 
   return (
-    <Page>
+    <Page className={styles.page}>
       <PageHeader title="Urnes de Papel">
         {about.statement && <p className={styles.statement}>{about.statement}</p>}
       </PageHeader>
@@ -44,7 +44,7 @@ const AboutPage = async ({ params }: Props) => {
       {about.sections && about.sections.length > 0 && (
         <div className={styles.sections}>
           {about.sections.map((section) => (
-            <section key={section.id} className={styles.section}>
+            <section key={section.id} className={styles.section} data-reveal>
               <h2 className={styles.heading}>{section.heading}</h2>
               <Paragraphs text={section.body} />
               {section.linkToPricing && <TextLink href="/tarifs">{t("customizationOptions")} →</TextLink>}

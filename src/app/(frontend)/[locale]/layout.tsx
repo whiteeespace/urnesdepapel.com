@@ -9,11 +9,13 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import Intro from "@/components/Intro";
 import { routing } from "@/i18n/routing";
 import { getSettings } from "@/lib/payload";
 import { siteUrl } from "@/lib/site-url";
 
 import "@/styles/global.scss";
+import "@/styles/motion.scss";
 
 const serif = Source_Serif_4({
   subsets: ["latin"],
@@ -78,6 +80,7 @@ const LocaleLayout = async ({ children, params }: Props) => {
       className={classNames(serif.variable, sans.variable, label.variable, titling.variable)}
     >
       <body>
+        <Intro />
         <NextIntlClientProvider>
           <Header />
           <main id="main">{children}</main>

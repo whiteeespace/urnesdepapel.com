@@ -1,6 +1,7 @@
 :root {
   /* Brand (Pinabel 2014): PMS 617U gold and Noir 80 % */
-  --color-paper: #f7f4ed;
+  /* Testing plain white; paper was #f7f4ed */
+  --color-paper: #ffffff;
   --color-ink: #2a2926;
   --color-ink-80: #58585a;
   --color-muted: #7f7c74;
@@ -11,7 +12,8 @@
   --color-error: #9a3a2c;
 
   /* Handmade-paper surface (seamless tile, drawn at half size for sharp retina) */
-  --paper-texture: url("/textures/paper.jpg") 0 0 / 768px 768px;
+  /* Testing plain white; was url("/textures/paper.jpg") 0 0 / 768px 768px */
+  --paper-texture: none;
 
   /* Fonts: serif for titles and headings, sans for text and UI, 42dot Sans for labels */
   --font-serif: var(--font-source-serif), "Iowan Old Style", Georgia, serif;
@@ -25,8 +27,21 @@
   --content-width: 1800px;
   --gutter: clamp(24px, 4vw, 64px);
   --section-gap: clamp(56px, 8vw, 104px);
+  /* Header and footer: a little closer to the window edges than the page, words set large
+     (about 29px on a 1440px screen) */
+  --bar-edge: clamp(20px, 2.6vw, 44px);
+  --bar-size: clamp(18px, 2vw, 34px);
+  --bar-height: 100px;
 
   color-scheme: light;
+}
+
+/* Where the header's links fold into a menu ($nav), the bars line up with the page again. */
+@media (max-width: 900px) {
+  :root {
+    --bar-edge: var(--gutter);
+    --bar-height: 76px;
+  }
 }
 
 *,

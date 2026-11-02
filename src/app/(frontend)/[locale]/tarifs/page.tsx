@@ -30,7 +30,8 @@ interface PriceCardProps {
   className?: string;
 }
 
-// The photo fills the card; the name and price sit on it, and the description opens under them.
+// The photo fills the card; the name sits on it on one line, the price and the details toggle under
+// it, and the description opens below.
 const PriceCard = ({
   name,
   price,
@@ -39,13 +40,11 @@ const PriceCard = ({
   className,
   children,
 }: PropsWithChildren<PriceCardProps>) => (
-  <article className={classNames(styles.card, className)}>
+  <article className={classNames(styles.card, className)} data-reveal>
     {children}
     <div className={styles.overlay}>
-      <div className={styles.top}>
-        <h2 className={styles.name}>{name}</h2>
-        <span className={styles.price}>{price}</span>
-      </div>
+      <h2 className={styles.name}>{name}</h2>
+      <span className={styles.price}>{price}</span>
       {description && (
         <details className={styles.details}>
           <summary className={styles.summary}>{detailsLabel}</summary>

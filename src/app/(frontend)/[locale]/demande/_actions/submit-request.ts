@@ -62,7 +62,6 @@ export default async function submitRequest(values: RequestFormValues): Promise<
         name: data.name,
         email: data.email,
         phone: data.phone || undefined,
-        contactPreference: data.contactPreference,
         message: data.message || undefined,
         locale,
       },

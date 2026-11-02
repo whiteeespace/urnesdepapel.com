@@ -3,17 +3,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import classNames from "classnames";
 import { useLocale, useTranslations } from "next-intl";
-import { useState, type ReactNode } from "react";
-import { useForm, useWatch } from "react-hook-form";
+import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useForm, useWatch, type DefaultValues } from "react-hook-form";
 
 import { Button, TextLink } from "@/components/Button";
 import UrnFigure from "@/components/UrnFigure";
 import { formatPrice } from "@/lib/price";
 import { requestSchema, type RequestErrorKey, type RequestFormValues } from "@/lib/request-schema";
 import type { Shape } from "@/payload/collections/Models";
+import type { Media } from "@/payload-types";
 
 import submitRequest from "../_actions/submit-request";
 
+import DatePicker from "./DatePicker";
 import styles from "./styles.module.scss";
 
 export interface FormUrn {
@@ -24,6 +26,9 @@ export interface FormUrn {
   price: number;
   shape: Shape;
   tint: string | null;
+  /** The urn's first photo, and its model's cover; the drawing stands in for a missing one. */
+  photo?: Media;
+  modelCover?: Media;
 }
 
 export interface FormOption {
@@ -41,21 +46,28 @@ interface Props {
   basePrice: number;
   initialUrn: string;
   phone: string;
-  leadTimeNote: string;
 }
 
-const TYPES = ["order", "customize", "question"] as const;
+type Type = RequestFormValues["type"];
+type StepId = "type" | "model" | "urn" | "options" | "timing" | "contact";
+
+const TYPES = ["order", "question"] as const;
+
+// One question per screen. A question goes straight to the contact details; choosing no model
+// skips the colours. `model` is null until answered and "" for "not sure yet".
+const pathFor = (type: Type, model: string | null): StepId[] =>
+  type === "question"
+    ? ["type", "contact"]
+    : ["type", "model", ...(model === "" ? [] : (["urn"] as const)), "options", "timing", "contact"];
 
 const Field = ({
   id,
   label,
-  hint,
   error,
   children,
 }: {
   id: string;
   label: ReactNode;
-  hint?: ReactNode;
   error?: string;
   children: ReactNode;
 }) => (
@@ -64,11 +76,6 @@ const Field = ({
       {label}
     </label>
     {children}
-    {hint && (
-      <span id={`${id}-hint`} className={styles.hint}>
-        {hint}
-      </span>
-    )}
     {error && (
       <span id={`${id}-error`} className={styles.error}>
         {error}
@@ -86,22 +93,93 @@ const Required = ({ label }: { label: string }) => (
   </>
 );
 
-const RequestForm = ({ urns, options, basePrice, initialUrn, phone, leadTimeNote }: Props) => {
+const Tick = () => (
+  <svg className={styles.tick} viewBox="0 0 16 16" aria-hidden="true">
+    <path d="M3.5 8.5l3 3 6-7" />
+  </svg>
+);
+
+// A selectable answer: a native radio or checkbox inside a card.
+const Choice = ({
+  input,
+  icon,
+  title,
+  hint,
+  aside,
+  disabled,
+}: {
+  input: ReactNode;
+  icon?: ReactNode;
+  title: ReactNode;
+  hint?: ReactNode;
+  aside?: ReactNode;
+  disabled?: boolean;
+}) => (
+  <label className={classNames(styles.choice, disabled && styles.disabled)}>
+    {input}
+    {icon && <span className={styles.icon}>{icon}</span>}
+    <span className={styles.choiceText}>
+      <span className={styles.choiceTitle}>{title}</span>
+      {hint && <span className={styles.hint}>{hint}</span>}
+    </span>
+    {aside && <span className={styles.aside}>{aside}</span>}
+  </label>
+);
+
+// A personalization in one row: tick box, name and what it is, then the price. One that needs
+// another option first is faded until that one is ticked.
+const OptionCard = ({
+  input,
+  title,
+  description,
+  price,
+  locked,
+}: {
+  input: ReactNode;
+  title: string;
+  description: string;
+  price: string;
+  locked: boolean;
+}) => (
+  <label className={classNames(styles.choice, styles.option, locked && styles.disabled)}>
+    {input}
+    <span className={styles.box}>
+      <Tick />
+    </span>
+    <span className={styles.choiceText}>
+      <span className={styles.choiceTitle}>{title}</span>
+      <span className={styles.hint}>{description}</span>
+    </span>
+    <span className={styles.aside}>{price}</span>
+  </label>
+);
+
+const RequestForm = ({ urns, options, basePrice, initialUrn, phone }: Props) => {
   const t = useTranslations("request");
   const tCommon = useTranslations("common");
   const locale = useLocale();
   const [result, setResult] = useState<"idle" | "sent" | "error">("idle");
-  const [sentTo, setSentTo] = useState<{ name: string; via: "email" | "phone" } | null>(null);
+  const [sentTo, setSentTo] = useState<string | null>(null);
+  const initialModel = urns.find((urn) => String(urn.number) === initialUrn)?.modelName ?? null;
+  const [model, setModel] = useState<string | null>(initialModel);
+  // Coming from an urn's page, the request, model and colour are already answered: start at the
+  // personalizations, with the earlier steps still there to revisit.
+  const initialStep: StepId = initialModel ? "options" : "type";
+  const [step, setStep] = useState<StepId>(initialStep);
+  const formRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const moved = useRef(false);
+  const arrowKey = useRef(false);
 
-  const defaultValues: RequestFormValues = {
-    type: "order",
+  // Nothing is picked on the first question, unless the person came from an urn's "request" link.
+  const defaultValues: DefaultValues<RequestFormValues> = {
+    type: initialUrn ? "order" : undefined,
     urn: initialUrn,
     options: [],
     preferredDate: "",
     name: "",
     email: "",
     phone: "",
-    contactPreference: "email",
     message: "",
     website: "",
   };
@@ -112,19 +190,60 @@ const RequestForm = ({ urns, options, basePrice, initialUrn, phone, leadTimeNote
     control,
     setValue,
     reset,
-    formState: { errors, isSubmitting, isSubmitted },
-  } = useForm<RequestFormValues>({ resolver: zodResolver(requestSchema), defaultValues });
+    formState: { errors, isSubmitting },
+    // Each field is checked when the person leaves it, then again as they correct it.
+  } = useForm<RequestFormValues>({ resolver: zodResolver(requestSchema), defaultValues, mode: "onTouched" });
 
-  const [type, urnValue, selected] = useWatch({ control, name: ["type", "urn", "options"] });
-  const groups = urns.reduce<[string, FormUrn[]][]>((acc, urn) => {
+  const [type, urnValue, selected, preferredDate] = useWatch({
+    control,
+    name: ["type", "urn", "options", "preferredDate"],
+  });
+  const path = pathFor(type, model);
+  const index = Math.max(path.indexOf(step), 0);
+
+  // After each move, bring the new question into view and give it focus for screen readers.
+  useEffect(() => {
+    if (!moved.current) return;
+    if (formRef.current && formRef.current.getBoundingClientRect().top < 0) {
+      formRef.current.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+    headingRef.current?.focus({ preventScroll: true });
+  }, [step]);
+
+  const models = urns.reduce<{ name: string; urns: FormUrn[] }[]>((acc, urn) => {
     const last = acc.at(-1);
-    if (last?.[0] === urn.modelName) last[1].push(urn);
-    else acc.push([urn.modelName, [urn]]);
+    if (last?.name === urn.modelName) last.urns.push(urn);
+    else acc.push({ name: urn.modelName, urns: [urn] });
     return acc;
   }, []);
   const selectedUrn = urns.find((urn) => String(urn.number) === urnValue);
   const isSelected = (id: string | null) => id !== null && selected.includes(id);
-  const optionName = (id: string | null) => options.find((option) => option.id === id)?.name ?? "";
+
+  const goTo = (next: StepId | undefined) => {
+    if (!next) return;
+    moved.current = true;
+    setStep(next);
+  };
+  // The next step is worked out from the answer just given, before it has re-rendered.
+  const advance = (from: StepId, nextType = type, nextModel = model) => {
+    const nextPath = pathFor(nextType, nextModel);
+    goTo(nextPath[nextPath.indexOf(from) + 1]);
+  };
+
+  // A pointer click or Space on an answer moves on; arrowing through the answers only picks.
+  const pick = (move: () => void) => {
+    if (arrowKey.current) arrowKey.current = false;
+    else move();
+  };
+  const trackArrows = (event: { key: string }) => {
+    arrowKey.current = event.key.startsWith("Arrow");
+  };
+
+  const chooseModel = (name: string) => {
+    if (selectedUrn?.modelName !== name) setValue("urn", "");
+    setModel(name);
+    advance("model", type, name);
+  };
 
   // Unchecking an option also unchecks the options that depend on it.
   const toggleOption = (option: FormOption, checked: boolean) => {
@@ -134,47 +253,58 @@ const RequestForm = ({ urns, options, basePrice, initialUrn, phone, leadTimeNote
     setValue("options", next, { shouldDirty: true });
   };
 
-  const activeOptions = options.filter(
-    (option) => isSelected(option.id) && (!option.requires || isSelected(option.requires))
-  );
-  const lines: { label: string; min: number; max: number }[] = [];
-  if (selectedUrn) {
-    lines.push({
-      label: t("estimate.urn", {
-        title: `${selectedUrn.modelName} ${tCommon("urnNumber", { number: selectedUrn.number })}`,
-      }),
-      min: selectedUrn.price,
-      max: selectedUrn.price,
-    });
-  } else if (type !== "question" || activeOptions.length > 0) {
-    lines.push({ label: t("estimate.basicUrn"), min: basePrice, max: basePrice });
-  }
-  for (const option of activeOptions) {
-    lines.push({ label: option.name, min: option.priceMin, max: option.priceMax ?? option.priceMin });
-  }
-  const totalMin = lines.reduce((sum, line) => sum + line.min, 0);
-  const totalMax = lines.reduce((sum, line) => sum + line.max, 0);
+  const activeOptions =
+    type === "question"
+      ? []
+      : options.filter(
+          (option) => isSelected(option.id) && (!option.requires || isSelected(option.requires))
+        );
+  const base = selectedUrn?.price ?? basePrice;
+  const totalMin = base + activeOptions.reduce((sum, option) => sum + option.priceMin, 0);
+  const totalMax =
+    base + activeOptions.reduce((sum, option) => sum + (option.priceMax ?? option.priceMin), 0);
+  const dateLabel = preferredDate
+    ? new Intl.DateTimeFormat(locale === "fr" ? "fr-CA" : "en-CA", { dateStyle: "long" }).format(
+        new Date(`${preferredDate}T12:00:00`)
+      )
+    : null;
 
   const errorText = (key?: string) => (key ? t(`errors.${key as RequestErrorKey}`) : undefined);
-  const describedBy = (id: string, error: unknown, hint = false) =>
-    classNames({ [`${id}-hint`]: hint, [`${id}-error`]: Boolean(error) }) || undefined;
+  const describedBy = (id: string, error: unknown) => (error ? `${id}-error` : undefined);
 
   const onSubmit = async (values: RequestFormValues) => {
-    const response = await submitRequest(values);
+    const response = await submitRequest({
+      ...values,
+      options: values.type === "question" ? [] : values.options,
+      preferredDate: values.type === "question" ? "" : values.preferredDate,
+    });
     if (!response.ok) {
       setResult("error");
       return;
     }
-    setSentTo({ name: values.name, via: values.contactPreference });
+    setSentTo(values.name);
     setResult("sent");
     window.scrollTo({ top: 0 });
+  };
+
+  // Enter moves on from the date; only the contact step sends the request.
+  const onFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+    if (step === "contact") {
+      handleSubmit(onSubmit)(event);
+      return;
+    }
+    event.preventDefault();
+    if (step === "options" || step === "timing") advance(step);
   };
 
   if (result === "sent" && sentTo) {
     return (
       <div className={styles.done} role="status">
-        <h2 className={styles.doneTitle}>{t("done.title", { name: sentTo.name })}</h2>
-        <p className={styles.doneBody}>{t("done.body", { via: sentTo.via })}</p>
+        <span className={styles.doneMark}>
+          <Tick />
+        </span>
+        <h2 className={styles.doneTitle}>{t("done.title", { name: sentTo })}</h2>
+        <p className={styles.doneBody}>{t("done.body")}</p>
         <div className={styles.actions}>
           <Button
             variant="secondary"
@@ -182,6 +312,9 @@ const RequestForm = ({ urns, options, basePrice, initialUrn, phone, leadTimeNote
               reset(defaultValues);
               setResult("idle");
               setSentTo(null);
+              setModel(initialModel);
+              moved.current = false;
+              setStep(initialStep);
             }}
           >
             {t("done.again")}
@@ -192,256 +325,407 @@ const RequestForm = ({ urns, options, basePrice, initialUrn, phone, leadTimeNote
     );
   }
 
-  const hasErrors = isSubmitted && Object.keys(errors).length > 0;
+  const question = (title: string, hint?: string, optional?: boolean) => (
+    <div className={styles.head}>
+      <h2 ref={headingRef} tabIndex={-1} className={styles.question}>
+        {title}
+        {optional && <span className={styles.optional}> ({t("optional")})</span>}
+      </h2>
+      {hint && <p className={styles.lead}>{hint}</p>}
+    </div>
+  );
 
-  return (
-    <div className={styles.layout}>
-      <form className={styles.form} onSubmit={handleSubmit(onSubmit)} noValidate>
-        {hasErrors && (
-          <p className={styles.alert} role="alert">
-            {t("errors.summary")}
-          </p>
-        )}
-
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>{t("type.legend")}</legend>
-          <div className={styles.chips}>
-            {TYPES.map((value) => (
-              <label key={value} className={styles.chip}>
-                <input type="radio" value={value} {...register("type")} />
-                <span>{t(`type.${value}`)}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>{t("urn.legend")}</legend>
-          <Field id="urn" label={t("urn.label")}>
-            <select id="urn" className={styles.input} {...register("urn")}>
-              <option value="">{t("urn.none")}</option>
-              {groups.map(([modelName, group]) => (
-                <optgroup key={modelName} label={modelName}>
-                  {group.map((urn) => (
-                    <option key={urn.number} value={String(urn.number)}>
-                      {modelName} {tCommon("urnNumber", { number: urn.number })} · {urn.colour}
-                    </option>
-                  ))}
-                </optgroup>
-              ))}
-            </select>
-          </Field>
-          {selectedUrn && (
-            <div className={styles.preview}>
-              <UrnFigure shape={selectedUrn.shape} tint={selectedUrn.tint} sizes="64px" />
-              <p>{selectedUrn.description}</p>
-            </div>
-          )}
-        </fieldset>
-
-        {options.length > 0 && (
+  const renderStep = () => {
+    switch (step) {
+      case "type":
+        return (
           <fieldset className={styles.fieldset}>
-            <legend className={styles.legend}>{t("options.legend")}</legend>
-            <div className={styles.checks}>
+            <legend className="visually-hidden">{t("type.title")}</legend>
+            {question(t("type.title"))}
+            <div className={styles.choices} onKeyDown={trackArrows}>
+              {TYPES.map((value) => (
+                <Choice
+                  key={value}
+                  title={t(`type.${value}`)}
+                  hint={t(`type.${value}Hint`)}
+                  input={
+                    <input
+                      type="radio"
+                      value={value}
+                      className={styles.input}
+                      {...register("type")}
+                      onClick={() => pick(() => advance("type", value))}
+                    />
+                  }
+                />
+              ))}
+            </div>
+          </fieldset>
+        );
+
+      case "model":
+        return (
+          <fieldset className={styles.fieldset}>
+            <legend className="visually-hidden">{t("model.title")}</legend>
+            {question(t("model.title"))}
+            <div className={styles.choices} onKeyDown={trackArrows}>
+              {models.map(({ name, urns: group }) => (
+                <Choice
+                  key={name}
+                  icon={
+                    <UrnFigure
+                      media={group[0]?.modelCover ?? group.find((urn) => urn.photo)?.photo}
+                      shape={group[0]?.shape}
+                      ratio="square"
+                      sizes="44px"
+                    />
+                  }
+                  title={name}
+                  hint={t("model.count", { count: group.length })}
+                  input={
+                    <input
+                      type="radio"
+                      name="model"
+                      checked={model === name}
+                      className={styles.input}
+                      onChange={() => undefined}
+                      onClick={() => pick(() => chooseModel(name))}
+                    />
+                  }
+                />
+              ))}
+              <Choice
+                title={t("model.none")}
+                hint={t("model.noneHint")}
+                input={
+                  <input
+                    type="radio"
+                    name="model"
+                    checked={model === ""}
+                    className={styles.input}
+                    onChange={() => undefined}
+                    onClick={() => pick(() => chooseModel(""))}
+                  />
+                }
+              />
+            </div>
+          </fieldset>
+        );
+
+      case "urn":
+        return (
+          <fieldset className={styles.fieldset}>
+            <legend className="visually-hidden">{t("urn.title")}</legend>
+            {question(t("urn.title"), model ?? undefined)}
+            <div className={styles.choices} onKeyDown={trackArrows}>
+              {models
+                .find(({ name }) => name === model)
+                ?.urns.map((urn) => (
+                  <Choice
+                    key={urn.number}
+                    icon={
+                      <UrnFigure
+                        media={urn.photo}
+                        shape={urn.shape}
+                        tint={urn.tint}
+                        ratio="square"
+                        sizes="44px"
+                      />
+                    }
+                    title={urn.colour}
+                    hint={tCommon("urnNumber", { number: urn.number })}
+                    aside={formatPrice(locale, urn.price)}
+                    input={
+                      <input
+                        type="radio"
+                        value={String(urn.number)}
+                        className={styles.input}
+                        {...register("urn")}
+                        onClick={() => pick(() => advance("urn"))}
+                      />
+                    }
+                  />
+                ))}
+            </div>
+          </fieldset>
+        );
+
+      case "options":
+        return (
+          <fieldset className={styles.fieldset}>
+            <legend className="visually-hidden">{t("options.title")}</legend>
+            {question(t("options.title"), t("options.hint"))}
+            <div className={styles.choices}>
               {options.map((option) => {
                 const locked = Boolean(option.requires) && !isSelected(option.requires);
                 return (
-                  <label key={option.id} className={classNames(styles.check, locked && styles.locked)}>
-                    <input
-                      type="checkbox"
-                      checked={isSelected(option.id) && !locked}
-                      disabled={locked}
-                      onChange={(event) => toggleOption(option, event.target.checked)}
-                    />
-                    <span>
-                      <span className={styles.checkName}>{option.name}</span>
-                      <span className={styles.hint}>
-                        {locked
-                          ? t("options.requires", { option: optionName(option.requires) })
-                          : option.description}
-                      </span>
-                    </span>
-                    <span className={styles.checkPrice}>
-                      + {formatPrice(locale, option.priceMin, option.priceMax)}
-                    </span>
-                  </label>
+                  <OptionCard
+                    key={option.id}
+                    title={option.name}
+                    description={option.description}
+                    price={`+ ${formatPrice(locale, option.priceMin, option.priceMax)}`}
+                    locked={locked}
+                    input={
+                      <input
+                        type="checkbox"
+                        className={styles.input}
+                        checked={isSelected(option.id) && !locked}
+                        disabled={locked}
+                        onChange={(event) => toggleOption(option, event.target.checked)}
+                      />
+                    }
+                  />
                 );
               })}
             </div>
           </fieldset>
-        )}
+        );
 
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>{t("timing.legend")}</legend>
-          <Field
-            id="preferredDate"
-            label={
-              <>
-                {t("timing.label")} <span className={styles.optional}>({t("optional")})</span>
-              </>
-            }
-            hint={t("timing.hint")}
-          >
-            <input
-              id="preferredDate"
-              type="date"
-              className={classNames(styles.input, styles.date)}
-              aria-describedby="preferredDate-hint"
-              {...register("preferredDate")}
-            />
-          </Field>
-        </fieldset>
-
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.legend}>{t("contact.legend")}</legend>
-          <Field
-            id="name"
-            label={
-              <>
-                {t("contact.name")} <Required label={t("required")} />
-              </>
-            }
-            error={errorText(errors.name?.message)}
-          >
-            <input
-              id="name"
-              type="text"
-              autoComplete="name"
-              className={styles.input}
-              aria-invalid={Boolean(errors.name)}
-              aria-describedby={describedBy("name", errors.name)}
-              {...register("name")}
-            />
-          </Field>
-          <div className={styles.two}>
-            <Field
-              id="email"
-              label={
-                <>
-                  {t("contact.email")} <Required label={t("required")} />
-                </>
-              }
-              error={errorText(errors.email?.message)}
-            >
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                className={styles.input}
-                aria-invalid={Boolean(errors.email)}
-                aria-describedby={describedBy("email", errors.email)}
-                {...register("email")}
+      case "timing":
+        return (
+          <fieldset className={styles.fieldset}>
+            <legend className="visually-hidden">{t("timing.title")}</legend>
+            {question(t("timing.title"), undefined, true)}
+            <div className={styles.reveal}>
+              <span id="preferredDate-label" className={styles.label}>
+                {t("timing.label")}
+                {dateLabel && <span className={styles.chosen}> · {dateLabel}</span>}
+              </span>
+              <DatePicker
+                value={preferredDate}
+                onChange={(value) => setValue("preferredDate", value, { shouldDirty: true })}
+                locale={locale}
+                labelledBy="preferredDate-label"
+                previousLabel={t("timing.previousMonth")}
+                nextLabel={t("timing.nextMonth")}
               />
-            </Field>
-            <Field
-              id="phone"
-              label={
-                <>
-                  {t("contact.phone")} <span className={styles.optional}>({t("optional")})</span>
-                </>
-              }
-              error={errorText(errors.phone?.message)}
-            >
-              <input
-                id="phone"
-                type="tel"
-                autoComplete="tel"
-                className={styles.input}
-                aria-invalid={Boolean(errors.phone)}
-                aria-describedby={describedBy("phone", errors.phone)}
-                {...register("phone")}
-              />
-            </Field>
-          </div>
-          <div className={styles.field} role="radiogroup" aria-labelledby="preference-label">
-            <span id="preference-label" className={styles.label}>
-              {t("contact.preference")}
-            </span>
-            <div className={styles.radios}>
-              <label>
-                <input type="radio" value="email" {...register("contactPreference")} />
-                {t("contact.byEmail")}
-              </label>
-              <label>
-                <input type="radio" value="phone" {...register("contactPreference")} />
-                {t("contact.byPhone")}
-              </label>
             </div>
-          </div>
-          <Field
-            id="message"
-            label={
-              <>
-                {t("contact.message")}{" "}
-                {type === "question" ? (
-                  <Required label={t("required")} />
-                ) : (
-                  <span className={styles.optional}>({t("optional")})</span>
-                )}
-              </>
-            }
-            error={errorText(errors.message?.message)}
-          >
-            <textarea
-              id="message"
-              rows={6}
-              className={classNames(styles.input, styles.textarea)}
-              placeholder={t("contact.messageHint")}
-              aria-invalid={Boolean(errors.message)}
-              aria-describedby={describedBy("message", errors.message)}
-              {...register("message")}
-            />
-          </Field>
-          <div className={styles.honeypot} aria-hidden="true">
-            <label htmlFor="website">Website</label>
-            <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
-          </div>
-        </fieldset>
+          </fieldset>
+        );
 
-        <div className={styles.submit}>
-          {lines.length > 0 && (
-            <span className={styles.inlineEstimate}>
-              {t("estimate.title")}
-              {locale === "fr" ? "\u202f: " : ": "}
-              {formatPrice(locale, totalMin, totalMax)}
-            </span>
+      case "contact":
+        return (
+          <fieldset className={classNames(styles.fieldset, styles.contact)}>
+            <legend className="visually-hidden">{t("contact.title")}</legend>
+            {question(t("contact.title"), t("contact.intro"))}
+
+            {type !== "question" && (
+              <div className={styles.summary}>
+                {selectedUrn && (
+                  <span className={styles.icon}>
+                    <UrnFigure
+                      media={selectedUrn.photo}
+                      shape={selectedUrn.shape}
+                      tint={selectedUrn.tint}
+                      ratio="square"
+                      sizes="44px"
+                    />
+                  </span>
+                )}
+                <span className={styles.choiceText}>
+                  <span className={styles.choiceTitle}>
+                    {selectedUrn
+                      ? `${selectedUrn.modelName} ${tCommon("urnNumber", { number: selectedUrn.number })} · ${selectedUrn.colour}`
+                      : t("summary.noUrn")}
+                  </span>
+                  {(activeOptions.length > 0 || dateLabel) && (
+                    <span className={classNames(styles.hint, styles.summaryItems)}>
+                      {[
+                        ...activeOptions.map((option) => option.name),
+                        dateLabel ? t("summary.date", { date: dateLabel }) : null,
+                      ]
+                        .filter(Boolean)
+                        .map((item) => (
+                          <span key={item}>{item}</span>
+                        ))}
+                    </span>
+                  )}
+                </span>
+                <span className={styles.summaryEstimate}>
+                  <span className={styles.estimate}>
+                    {t("estimate.title")} <strong>{formatPrice(locale, totalMin, totalMax)}</strong>
+                  </span>
+                  <span className={styles.hint}>{t("estimate.note")}</span>
+                </span>
+              </div>
+            )}
+
+            <div className={styles.three}>
+              <Field
+                id="name"
+                label={
+                  <>
+                    {t("contact.name")} <Required label={t("required")} />
+                  </>
+                }
+                error={errorText(errors.name?.message)}
+              >
+                <input
+                  id="name"
+                  type="text"
+                  autoComplete="name"
+                  className={styles.text}
+                  aria-invalid={Boolean(errors.name)}
+                  aria-describedby={describedBy("name", errors.name)}
+                  {...register("name")}
+                />
+              </Field>
+              <Field
+                id="email"
+                label={
+                  <>
+                    {t("contact.email")} <Required label={t("required")} />
+                  </>
+                }
+                error={errorText(errors.email?.message)}
+              >
+                <input
+                  id="email"
+                  type="email"
+                  inputMode="email"
+                  autoComplete="email"
+                  className={styles.text}
+                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby={describedBy("email", errors.email)}
+                  {...register("email")}
+                />
+              </Field>
+              <Field
+                id="phone"
+                label={
+                  <>
+                    {t("contact.phone")} <span className={styles.optional}>({t("optional")})</span>
+                  </>
+                }
+                error={errorText(errors.phone?.message)}
+              >
+                <input
+                  id="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  className={styles.text}
+                  aria-invalid={Boolean(errors.phone)}
+                  aria-describedby={describedBy("phone", errors.phone)}
+                  {...register("phone")}
+                />
+              </Field>
+            </div>
+            <Field
+              id="message"
+              label={
+                <>
+                  {t("contact.message")}{" "}
+                  {type === "question" ? (
+                    <Required label={t("required")} />
+                  ) : (
+                    <span className={styles.optional}>({t("optional")})</span>
+                  )}
+                </>
+              }
+              error={errorText(errors.message?.message)}
+            >
+              <textarea
+                id="message"
+                rows={3}
+                className={classNames(styles.text, styles.textarea)}
+                aria-invalid={Boolean(errors.message)}
+                aria-describedby={describedBy("message", errors.message)}
+                {...register("message")}
+              />
+            </Field>
+            {result === "error" && (
+              <p className={styles.alert} role="alert">
+                {t("errors.server", { phone })}
+              </p>
+            )}
+          </fieldset>
+        );
+    }
+  };
+
+  // Only the multiple-choice and typed steps need a button; the others move on when answered.
+  const button =
+    step === "options"
+      ? activeOptions.length > 0
+        ? t("next")
+        : t("skip")
+      : step === "timing"
+        ? preferredDate
+          ? t("next")
+          : t("skip")
+        : step === "contact"
+          ? isSubmitting
+            ? t("sending")
+            : t("submit")
+          : null;
+
+  return (
+    <div ref={formRef} className={styles.wrap}>
+      {/* One segment per question; answered ones can be revisited. */}
+      <nav aria-label={t("progress", { current: index + 1, total: path.length })}>
+        <ol className={styles.steps}>
+          {path.map((id, i) => {
+            const label = (
+              <>
+                <span className={styles.stepNumber}>{String(i + 1).padStart(2, "0")}</span>
+                <span className={styles.stepName}>{t(`steps.${id}`)}</span>
+              </>
+            );
+            return (
+              <li
+                key={id}
+                className={classNames(
+                  styles.stepItem,
+                  i < index && styles.stepDone,
+                  i === index && styles.stepCurrent
+                )}
+                aria-current={i === index ? "step" : undefined}
+              >
+                {i < index ? (
+                  <button type="button" className={styles.stepLink} onClick={() => goTo(id)}>
+                    {label}
+                  </button>
+                ) : (
+                  <span className={styles.stepLink}>{label}</span>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+
+      <form className={styles.form} onSubmit={onFormSubmit} noValidate>
+        <div key={step} className={styles.step}>
+          {renderStep()}
+        </div>
+
+        <div className={styles.honeypot} aria-hidden="true">
+          <label htmlFor="website">Website</label>
+          <input id="website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
+        </div>
+
+        <div className={styles.footer}>
+          {index > 0 ? (
+            <button type="button" className={styles.back} onClick={() => goTo(path[index - 1])}>
+              <span aria-hidden="true">←</span> {t("back")}
+            </button>
+          ) : (
+            <span />
           )}
-          {result === "error" && (
-            <p className={styles.alert} role="alert">
-              {t("errors.server", { phone })}
-            </p>
-          )}
-          <div>
-            <Button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? t("sending") : t("submit")}
-            </Button>
+          <div className={styles.footerEnd}>
+            {step === "options" && (
+              <span className={styles.estimate}>
+                {t("estimate.title")} <strong>{formatPrice(locale, totalMin, totalMax)}</strong>
+              </span>
+            )}
+            {button && (
+              <Button type="submit" disabled={isSubmitting}>
+                {button}
+              </Button>
+            )}
           </div>
         </div>
       </form>
-
-      <aside className={styles.estimate} aria-live="polite">
-        <h2 className={styles.legend}>{t("estimate.title")}</h2>
-        {lines.length > 0 ? (
-          <>
-            <ul className={styles.lines}>
-              {lines.map((line) => (
-                <li key={line.label}>
-                  <span>{line.label}</span>
-                  <span className={styles.amount}>{formatPrice(locale, line.min, line.max)}</span>
-                </li>
-              ))}
-            </ul>
-            <div className={styles.total}>
-              <span>{t("estimate.total")}</span>
-              <strong>{formatPrice(locale, totalMin, totalMax)}</strong>
-            </div>
-          </>
-        ) : (
-          <p className={styles.hint}>{t("estimate.empty")}</p>
-        )}
-        <p className={styles.hint}>{t("estimate.note")}</p>
-        {leadTimeNote && <p className={styles.note}>{leadTimeNote}</p>}
-      </aside>
     </div>
   );
 };

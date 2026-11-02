@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
-import Logo from "@/components/Logo";
 import { Page, PageHeader } from "@/components/Page";
 import UrnFigure from "@/components/UrnFigure";
 import { Link } from "@/i18n/navigation";
@@ -34,45 +33,53 @@ const HomePage = async ({ params }: Props) => {
 
   return (
     <Page>
-      {/* Title and collections sit close together; the page's larger gap comes after. */}
+      {/* The page opens on the intro: the name is in the header's logo, so the title is for screen
+          readers. */}
       <div className={styles.top}>
-        <PageHeader
-          title={
-            <>
-              <span className="visually-hidden">Urnes de Papel</span>
-              <Logo variant="name" decorative className={styles.wordmarkArt} />
-              <Logo variant="stacked-name" decorative className={styles.wordmarkStacked} />
-            </>
-          }
-          titleClassName={styles.wordmark}
-        >
+        <PageHeader>
+          <h1 className="visually-hidden">Urnes de Papel</h1>
           {home.intro && <p className={styles.intro}>{home.intro}</p>}
         </PageHeader>
 
-        <section aria-labelledby="collections-label">
+        {/* On wide screens the cards start scattered; the row is pinned under the header while they
+            slide into line as the page scrolls. */}
+        <section aria-labelledby="collections-label" className={styles.collections}>
           <h2 id="collections-label" className="visually-hidden">
             {t("collections")}
           </h2>
-          <ul className={styles.models}>
-            {models.map((model, index) => (
-              <li key={model.id}>
-                <Link
-                  href={{ pathname: "/collections/[model]", params: { model: model.slug } }}
-                  className={styles.model}
-                >
-                  <UrnFigure
-                    media={asMedia(model.cover)}
-                    shape={model.shape}
-                    sizes="(max-width: 600px) 100vw, 33vw"
-                    priority={index === 0}
-                    className={styles.figure}
-                  />
-                  <span className={styles.name}>{model.name}</span>
-                  <span className={styles.count}>{t("urnCount", { count: countFor(model.id) })}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <div className={styles.stage}>
+            <ul className={styles.models}>
+              {models.map((model, index) => {
+                const count = countFor(model.id);
+                return (
+                  <li key={model.id} className={styles.slot}>
+                    <Link
+                      href={{ pathname: "/collections/[model]", params: { model: model.slug } }}
+                      className={styles.model}
+                    >
+                      <UrnFigure
+                        media={asMedia(model.cover)}
+                        shape={model.shape}
+                        sizes="(max-width: 860px) 80vw, 33vw"
+                        priority={index === 0}
+                        className={styles.figure}
+                      />
+                      <span className={styles.heading}>
+                        <span className={styles.name}>{model.name}</span>
+                        <span className={styles.count} aria-hidden="true">
+                          {count}
+                        </span>
+                        <span className="visually-hidden">{t("urnCount", { count })}</span>
+                      </span>
+                      <span className={model.intro ? styles.description : styles.todo}>
+                        {model.intro || t("toBeWritten")}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </section>
       </div>
     </Page>

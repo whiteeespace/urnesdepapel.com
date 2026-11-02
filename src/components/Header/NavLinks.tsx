@@ -1,13 +1,11 @@
 "use client";
 
-import classNames from "classnames";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { Link, usePathname } from "@/i18n/navigation";
 import type { Pathname } from "@/i18n/routing";
 
-import LocaleSwitcher from "./LocaleSwitcher";
 import styles from "./styles.module.scss";
 
 const LINKS = [
@@ -16,7 +14,7 @@ const LINKS = [
   { href: "/artisane", key: "artisan" },
 ] as const satisfies readonly { href: Pathname; key: string }[];
 
-// Inline links and languages on wide screens; behind a Menu button on narrow ones.
+// Inline links on wide screens; behind a Menu button on narrow ones.
 const NavLinks = () => {
   const t = useTranslations("nav");
   const pathname = usePathname();
@@ -51,7 +49,7 @@ const NavLinks = () => {
           <li>
             <Link
               href="/demande"
-              className={classNames(styles.link, styles.request)}
+              className={styles.link}
               aria-current={pathname === "/demande" ? "page" : undefined}
               onClick={close}
             >
@@ -59,7 +57,6 @@ const NavLinks = () => {
             </Link>
           </li>
         </ul>
-        <LocaleSwitcher />
       </div>
     </div>
   );

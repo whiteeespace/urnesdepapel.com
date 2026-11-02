@@ -11,6 +11,7 @@ import { getPayload, type Payload } from "payload";
 import config from "@payload-config";
 
 import * as copy from "./copy";
+import { basePhoto, modelCovers, optionPhotos, photos, urnPhotos } from "./photos";
 
 type Localized = { fr: string; en: string };
 interface CatalogueUrn {
@@ -30,6 +31,7 @@ interface CatalogueOption {
   priceMax?: number;
   name: Localized;
   description: Localized;
+  summary?: Localized;
 }
 interface Catalogue {
   urns: CatalogueUrn[];
@@ -59,14 +61,46 @@ const upsert = async (
   return doc;
 };
 
+// Uploads each photo once (matched by filename) and returns the media ids by filename.
+const uploadPhotos = async (payload: Payload): Promise<Record<string, number>> => {
+  const ids: Record<string, number> = {};
+  for (const [filename, alt] of Object.entries(photos)) {
+    const existing = await payload.find({
+      collection: "media",
+      where: { filename: { equals: filename } },
+      limit: 1,
+      depth: 0,
+      context,
+    });
+    const doc =
+      existing.docs[0] ??
+      (await payload.create({
+        collection: "media",
+        data: { alt: alt.fr },
+        filePath: path.resolve(dirname, "../../content/photos", filename),
+        locale: "fr",
+        context,
+      }));
+    await payload.update({ collection: "media", id: doc.id, data: { alt: alt.fr }, locale: "fr", context });
+    await payload.update({ collection: "media", id: doc.id, data: { alt: alt.en }, locale: "en", context });
+    ids[filename] = doc.id;
+  }
+  return ids;
+};
+
 const seed = async () => {
   const payload = await getPayload({ config });
   const catalogue = await loadCatalogue();
 
+  payload.logger.info("Uploading photos…");
+  const mediaIds = await uploadPhotos(payload);
+  const media = (filename: string | undefined) => (filename ? mediaIds[filename] : undefined);
+
   payload.logger.info("Seeding collections…");
   const modelIds: Record<string, number> = {};
   for (const model of copy.models) {
-    const doc = await upsert(payload, "models", { slug: { equals: model.slug } }, { ...model }, {});
+    const cover = media(modelCovers[model.slug]);
+    const doc = await upsert(payload, "models", { slug: { equals: model.slug } }, { ...model, cover }, {});
     modelIds[model.slug] = doc.id;
   }
 
@@ -76,8 +110,10 @@ const seed = async () => {
       model: modelIds[urn.model],
       price: urn.price,
       // Urns 21 and 36 are in the product sheet but not on the site canvas: hidden until confirmed.
-      visible: urn.inCanvas,
+      // Urns without a photo yet (22) are hidden too.
+      visible: urn.inCanvas && Boolean(urnPhotos[urn.number]),
       tint: copy.tints[urn.number],
+      images: (urnPhotos[urn.number] ?? []).map(media),
     };
     const pick = (lang: "fr" | "en") => ({
       description: urn.description[lang],
@@ -105,11 +141,13 @@ const seed = async () => {
       {
         name: option.name.fr,
         description: option.description.fr,
+        summary: option.summary?.fr,
         priceMin: option.price ?? option.priceMin,
         priceMax: option.priceMax ?? null,
+        image: media(optionPhotos[option.slug]),
         order: index + 1,
       },
-      { name: option.name.en, description: option.description.en }
+      { name: option.name.en, description: option.description.en, summary: option.summary?.en }
     );
     optionIds[option.slug] = doc.id;
   }
@@ -146,21 +184,8 @@ const seed = async () => {
     },
   });
 
-  const homeFr = await payload.updateGlobal({
-    slug: "home-page",
-    locale: "fr",
-    context,
-    data: { intro: copy.home.intro.fr, values: copy.home.values.map((v) => ({ label: v.fr })) },
-  });
-  await payload.updateGlobal({
-    slug: "home-page",
-    locale: "en",
-    context,
-    data: {
-      intro: copy.home.intro.en,
-      values: (homeFr.values ?? []).map((row, i) => ({ id: row.id, label: copy.home.values[i]?.en ?? "" })),
-    },
-  });
+  await payload.updateGlobal({ slug: "home-page", locale: "fr", context, data: { intro: copy.home.intro.fr } });
+  await payload.updateGlobal({ slug: "home-page", locale: "en", context, data: { intro: copy.home.intro.en } });
 
   const aboutFr = await payload.updateGlobal({
     slug: "about-page",
@@ -198,6 +223,7 @@ const seed = async () => {
         baseTitle: copy.pricing.baseTitle[locale],
         baseDescription: copy.pricing.baseDescription[locale],
         basePrice: copy.pricing.basePrice,
+        baseImage: media(basePhoto),
       },
     });
     await payload.updateGlobal({

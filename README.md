@@ -39,7 +39,7 @@ In development, Payload syncs the database schema automatically. After changing 
 | Page copy and site settings (globals) | `src/payload/globals/` |
 | URL slugs per language | `src/i18n/routing.ts` |
 | UI strings (buttons, labels, errors) | `src/messages/fr.json`, `src/messages/en.json` |
-| Seed data | `content/urns.json`, `src/seed/` |
+| Seed data | `content/urns.json`, `content/photos/` (placed by `src/seed/photos.ts`), `src/seed/` |
 | Clickable design prototype | `design/prototype.html` |
 | Title typeface source | `scripts/title-font/` |
 

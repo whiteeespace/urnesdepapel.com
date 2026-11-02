@@ -1,103 +1,182 @@
 @use "mixins" as *;
 
-// The brand name drawn from the logo artwork itself, in the logo's grey.
-.wordmark {
-  width: fit-content;
-  max-width: 100%;
-  margin-bottom: fig(12);
-  line-height: 0;
-  color: var(--color-ink-80);
-}
-
-.wordmarkArt {
-  width: clamp(18rem, 55vw, 60rem);
-  max-width: 100%;
-}
-
-// On phones the name breaks onto two lines so it can run the full width, much larger.
-.wordmarkStacked {
-  display: none;
-  width: 100%;
-}
-
-@include below($phone) {
-  .wordmark {
-    width: 100%;
-  }
-
-  .wordmarkArt {
-    display: none;
-  }
-
-  .wordmarkStacked {
-    display: block;
-  }
-}
-
 .intro {
   @include description;
 }
 
-// The one-line intro runs wider than other pages' descriptions (beating the page header's 46rem
-// measure), in em so it grows with the text and stays on one line on wide screens.
-.top .intro {
-  max-width: 36em;
-}
-
+// The collections start well below the intro.
 .top {
   display: flex;
   flex-direction: column;
-  gap: fig(28);
+  gap: clamp(72px, 10vw, 160px);
 }
 
+// The cards are scattered rather than lined up, all the same size and evenly spaced across: three
+// equal columns with wide gutters, each card dropping by its own amount (--drop) so they zigzag down
+// the page (left, right, then the middle) in a pattern that repeats every three cards. Dense packing
+// puts the third card back in the first row, in the middle column.
 .models {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 48px 28px;
+  grid-auto-flow: row dense;
+  align-items: start;
+  gap: clamp(72px, 9vw, 160px) clamp(28px, 6vw, 120px);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-// The name and count sit on the image: name bottom left, count top right.
+.slot {
+  margin-top: var(--drop);
+}
+
+.slot:nth-child(3n + 1) {
+  --drop: 0px;
+
+  grid-column: 1;
+}
+
+.slot:nth-child(3n + 2) {
+  --drop: clamp(160px, 18vw, 340px);
+
+  grid-column: 3;
+}
+
+.slot:nth-child(3n + 3) {
+  --drop: clamp(380px, 42vw, 780px);
+
+  grid-column: 2;
+}
+
+// Where the browser can tie animation to scrolling, the cards come into line: they arrive scattered
+// as above, then the row is pinned under the header and each card rises by its own drop as the page
+// scrolls, all reaching the same line together; a short pause on the straight row, and the page
+// moves on. The cards sit in line in the layout and are only shifted down at the start, so the
+// pinned row is no taller than one card. The spacer under the row is the scroll it takes (a spacer,
+// not padding, since the pinned row can only travel within the section's content).
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @include above($tablet) {
+      .collections {
+        view-timeline: --row block;
+
+        &::after {
+          content: "";
+          display: block;
+          height: 150svh;
+        }
+      }
+
+      // Pinned with some air between it and the header.
+      .stage {
+        position: sticky;
+        top: calc(var(--bar-height) + clamp(24px, 4vw, 64px));
+      }
+
+      .slot {
+        margin-top: 0;
+        animation: align cubic-bezier(0.3, 0, 0.2, 1) both;
+        animation-timeline: --row;
+        animation-range: contain 0% contain 80%;
+      }
+    }
+  }
+}
+
+@keyframes align {
+  from {
+    translate: 0 var(--drop);
+  }
+}
+
+// The photo in the same 3:4 frame on every card, then the name with its number of urns in a lighter
+// shade, then a few lines about it.
 .model {
-  position: relative;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: fig(8);
+  color: var(--color-ink);
   text-decoration: none;
 
   &:hover {
+    .figure img {
+      scale: 1.04;
+    }
+
     .figure svg {
       transform: translateY(-4px);
     }
 
     .name {
       text-decoration: underline;
-      text-underline-offset: 0.2em;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.15em;
     }
   }
 }
 
-.name {
-  position: absolute;
-  left: fig(14);
-  bottom: fig(10);
-  @include urn-name;
+.figure {
+  margin-bottom: fig(4);
 }
 
+.heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35em;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 2.3vw, 2.6rem);
+  line-height: 1.1;
+  text-transform: lowercase;
+}
+
+// The number of urns in the sans, smaller than the name and lighter.
 .count {
-  position: absolute;
-  top: fig(10);
-  right: fig(14);
-  @include label;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.72em;
+  color: var(--color-muted);
+  text-transform: none;
 }
 
-@include below($phone) {
+.description,
+.todo {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: fig(13);
+  line-height: 1.45;
+  color: var(--color-ink-80);
+  text-wrap: pretty;
+}
+
+.todo {
+  color: var(--color-muted);
+}
+
+// On narrower screens the cards come one under the other, all the same width and still scattered:
+// to the left, the right, then in between.
+@include below($tablet) {
   .models {
-    grid-template-columns: minmax(0, 1fr);
-    gap: fig(14);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(72px, 18vw, 120px);
   }
 
-  .figure {
-    aspect-ratio: 4 / 3;
+  .slot {
+    width: 74%;
+  }
+
+  .slot:nth-child(3n + 2) {
+    margin-top: 0;
+    align-self: flex-end;
+  }
+
+  .slot:nth-child(3n + 3) {
+    margin-top: 0;
+    margin-left: 10%;
+  }
+
+  .heading {
+    font-size: fig(24);
   }
 }

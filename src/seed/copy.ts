@@ -1,5 +1,4 @@
 // Page copy from the client's documents (docs/source), FR and EN side by side.
-type Pair = { fr: string; en: string };
 
 export const settings = {
   phone: "514 978 0118",
@@ -8,7 +7,10 @@ export const settings = {
     fr: "Urnes funéraires biodégradables fabriquées à la main",
     en: "Handmade biodegradable funeral urns",
   },
-  leadTimeNote: { fr: "Des délais de fabrication s’appliquent.", en: "Manufacturing lead times apply." },
+  leadTimeNote: {
+    fr: "Chaque urne est façonnée à la main ; prévoyez le temps de sa confection.",
+    en: "Each urn is shaped by hand, so please allow time for it to be made.",
+  },
   seoDescription: {
     fr: "Urnes funéraires biodégradables en papier d’art, fabriquées à la main au Québec par Suzanne Desbiens. Pièces uniques, personnalisables.",
     en: "Biodegradable funeral urns in art paper, handmade in Québec by Suzanne Desbiens. One-of-a-kind and personalizable.",
@@ -17,14 +19,9 @@ export const settings = {
 
 export const home = {
   intro: {
-    fr: "Urnes funéraires biodégradables, fabriquées à la main en papier d’art.",
-    en: "Biodegradable funeral urns, handmade from art paper.",
+    fr: "Des urnes funéraires biodégradables, façonnées à la main au Québec en papier d’art et en fibres végétales. Chaque urne est une pièce unique, qui peut accueillir un fragment de vêtement, une photo ou la page d’un livre aimé, et retourne à la terre ou à l’eau sans laisser de déchets toxiques.",
+    en: "Biodegradable funeral urns, shaped by hand in Québec from art paper and plant fibres. Each urn is a one-of-a-kind piece that can hold a fragment of clothing, a photo or the page of a beloved book, and returns to soil or water without leaving toxic waste.",
   },
-  values: [
-    { fr: "Pièces uniques", en: "One-of-a-kind pieces" },
-    { fr: "Fibres végétales", en: "Plant fibres" },
-    { fr: "Se dégradent dans la terre ou l’eau", en: "Degrade in soil or water" },
-  ] satisfies Pair[],
 };
 
 export const about = {

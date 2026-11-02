@@ -265,6 +265,10 @@ export interface PricingOption {
   id: number;
   name: string;
   description?: string | null;
+  /**
+   * One line for the request form. The full description stays on the pricing page.
+   */
+  summary?: string | null;
   priceMin: number;
   /**
    * Only for a range, e.g. $50–75.
@@ -456,6 +460,7 @@ export interface ModelsSelect<T extends boolean = true> {
 export interface PricingOptionsSelect<T extends boolean = true> {
   name?: T;
   description?: T;
+  summary?: T;
   priceMin?: T;
   priceMax?: T;
   requires?: T;
@@ -587,12 +592,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface HomePage {
   id: number;
   intro?: string | null;
-  values?:
-    | {
-        label: string;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -666,7 +665,7 @@ export interface SiteSetting {
   email?: string | null;
   etsyUrl?: string | null;
   /**
-   * Each new request from the form is emailed to this address.
+   * Each new request from the form is emailed to this address (or to the public email if left empty).
    */
   notificationEmail?: string | null;
   descriptor?: string | null;
@@ -681,12 +680,6 @@ export interface SiteSetting {
  */
 export interface HomePageSelect<T extends boolean = true> {
   intro?: T;
-  values?:
-    | T
-    | {
-        label?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
