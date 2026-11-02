@@ -37,13 +37,7 @@
     "basePrice": "Prix de base",
     "unique": "Pièce unique, façonnée à la main. Les reliefs et la texture varient d’une urne à l’autre.",
     "request": "Demander cette urne",
-    "previous": "Urne précédente",
-    "next": "Urne suivante",
-    "views": {
-      "front": "vue de face",
-      "detail": "détail",
-      "opening": "ouverture"
-    }
+    "back": "Retour"
   },
   "pricing": {
     "options": "Options supplémentaires",

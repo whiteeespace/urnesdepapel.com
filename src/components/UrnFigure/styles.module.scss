@@ -32,8 +32,10 @@
   }
 }
 
+// Cards zoom their photo a touch on hover.
 .image {
   object-fit: cover;
+  transition: scale 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .silhouette {

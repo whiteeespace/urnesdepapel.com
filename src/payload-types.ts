@@ -592,12 +592,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface HomePage {
   id: number;
   intro?: string | null;
-  values?:
-    | {
-        label: string;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -671,7 +665,7 @@ export interface SiteSetting {
   email?: string | null;
   etsyUrl?: string | null;
   /**
-   * Each new request from the form is emailed to this address.
+   * Each new request from the form is emailed to this address (or to the public email if left empty).
    */
   notificationEmail?: string | null;
   descriptor?: string | null;
@@ -686,12 +680,6 @@ export interface SiteSetting {
  */
 export interface HomePageSelect<T extends boolean = true> {
   intro?: T;
-  values?:
-    | T
-    | {
-        label?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

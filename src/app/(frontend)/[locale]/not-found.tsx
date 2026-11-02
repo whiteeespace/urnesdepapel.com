@@ -7,7 +7,7 @@ const NotFound = async () => {
   const t = await getTranslations("notFound");
 
   return (
-    <Page>
+    <Page fill>
       <PageHeader title={t("title")}>
         <p>{t("body")}</p>
       </PageHeader>

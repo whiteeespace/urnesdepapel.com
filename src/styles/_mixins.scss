@@ -62,11 +62,11 @@ $nav: 900px;
   color: var(--color-ink-80);
   text-wrap: balance;
 
-  // On phones, as large as the home page's two-line lettering, which runs the full content width
-  // (its capitals are 12.6 % of that width, i.e. 0.18 em). Words too long for a line hyphenate,
-  // or break if the browser can't.
+  // On phones the home page's lettering stacks onto two lines at the full content width, too large
+  // for a title word to fit: titles stay smaller, sized so the longest (INTROUVABLE, COLLECTIONS)
+  // still fit on one line. Words too long for a line hyphenate, or break if the browser can't.
   @include below($phone) {
-    font-size: calc((100vw - 2 * var(--gutter)) * 0.18);
+    font-size: calc((100vw - 2 * var(--gutter)) * 0.11);
     hyphens: auto;
     overflow-wrap: break-word;
   }
@@ -80,18 +80,20 @@ $nav: 900px;
   color: var(--color-ink);
 }
 
-// The description under each page's title: its opening line, in the serif like the headings
-// and larger than a lede. A little smaller on phones.
+// The description under each page's title: a large statement in the regular sans, set tight
+// like display text. A little smaller on phones.
 @mixin description {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-weight: 400;
-  font-size: clamp(#{fig(16)}, 1.9vw, #{fig(24)});
-  line-height: 1.4;
-  color: var(--color-ink-80);
+  font-size: clamp(#{fig(17)}, 2.3vw, #{fig(30)});
+  line-height: 1.16;
+  letter-spacing: -0.012em;
+  color: var(--color-ink);
   text-wrap: pretty;
 
   @include below($phone) {
-    font-size: fig(14);
+    font-size: fig(16);
+    line-height: 1.22;
   }
 }
 
@@ -116,27 +118,6 @@ $nav: 900px;
 @mixin fibres {
   background: currentColor;
   mask: url("/fibres.svg") 0 0 / 100% 100% no-repeat;
-}
-
-// Muted aside (lead times, notes), introduced by a short gold line of fibres.
-@mixin note {
-  display: flex;
-  align-items: center;
-  gap: fig(10);
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-size: fig(12);
-  line-height: math.div(20, 12);
-  color: var(--color-muted);
-
-  &::before {
-    content: "";
-    flex: none;
-    width: fig(28);
-    height: fig(6);
-    color: var(--color-gold);
-    @include fibres;
-  }
 }
 
 @mixin urn-number {
@@ -183,11 +164,12 @@ $nav: 900px;
   white-space: nowrap;
 }
 
+// Plain words in the sans, a touch heavier than text and a little larger on wide screens.
 @mixin nav-link {
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: fig(14);
-  text-transform: lowercase;
+  font-weight: 500;
+  font-size: clamp(#{fig(14)}, 1.35vw, #{fig(17)});
+  letter-spacing: -0.005em;
 }
 
 @mixin text-link {

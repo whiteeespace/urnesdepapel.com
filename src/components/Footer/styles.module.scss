@@ -1,25 +1,152 @@
+@use "mixins" as *;
+
+// Set like the header's links: the same edges and the same large words, in one row from the left:
+// the copyright, then the contact details and languages. (On phones the contact line comes first.)
 .inner {
+  max-width: var(--content-width);
+  margin-inline: auto;
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 12px 24px;
-  padding-block: 8px 40px;
-  font-family: var(--font-label);
-  font-size: 0.875rem;
-  color: var(--color-muted);
+  align-items: baseline;
+  gap: 0.4em 1.5em;
+  padding-block: 32px 40px;
+  padding-inline: max(var(--bar-edge), env(safe-area-inset-left, 0px))
+    max(var(--bar-edge), env(safe-area-inset-right, 0px));
+  @include nav-link;
+  font-weight: 600;
+  // A step smaller than the header's links: about 23px on a 1440px screen.
+  font-size: calc(var(--bar-size) * 0.8);
+  color: var(--color-ink);
 
   a {
-    color: var(--color-ink-80);
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-gold);
+    }
   }
+}
+
+.rights {
+  order: -1;
 }
 
 .contact {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 18px;
+  align-items: baseline;
+  gap: 0.4em 1.5em;
 }
 
 // Kept whole rather than breaking at its hyphens.
 .phone {
   white-space: nowrap;
+}
+
+// The current language is muted, the other one a link.
+.locales {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25em;
+  color: var(--color-muted);
+}
+
+.localeItem {
+  display: inline-flex;
+  gap: 0.25em;
+}
+
+.locale {
+  font: inherit;
+  color: var(--color-ink);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.3s ease;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--color-gold);
+  }
+
+  &[aria-pressed="true"] {
+    color: var(--color-muted);
+    cursor: default;
+  }
+}
+
+// On phones the copyright goes on a line of its own, set the same as the contact line, all sized
+// with the screen so it still fits on one line (about 13.5px on a 375px phone).
+@include below($phone) {
+  .rights {
+    order: 0;
+  }
+
+  .inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3em;
+    padding-block: 28px 32px;
+    font-size: min(#{fig(12)}, 3.6vw);
+  }
+
+  .contact {
+    gap: 0.4em 1.2em;
+  }
+}
+
+// The name in the logo's own lettering, as wide as the footer, tone on tone: a light tint of the
+// paper's warm grey, so it sits quietly under the page. On phones it breaks onto two lines so it can
+// stay large.
+.mark {
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding: clamp(8px, 2vw, 32px) max(var(--bar-edge), env(safe-area-inset-right, 0px))
+    max(var(--bar-edge), env(safe-area-inset-bottom, 0px)) max(var(--bar-edge), env(safe-area-inset-left, 0px));
+  color: color-mix(in srgb, var(--color-field) 55%, var(--color-paper));
+  line-height: 0;
+}
+
+.wordmark,
+.wordmarkStacked {
+  width: 100%;
+}
+
+.wordmarkStacked {
+  display: none;
+}
+
+// On phones the name breaks onto two lines, URNES over DE PAPEL, so it stays large.
+@include below($phone) {
+  .wordmark {
+    display: none;
+  }
+
+  .wordmarkStacked {
+    display: block;
+  }
+}
+
+// Where the browser can tie animation to scrolling, the name rises into view from its baseline as
+// the footer comes up, the way the intro draws the logo.
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .wordmark,
+    .wordmarkStacked {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+
+@keyframes rise {
+  from {
+    clip-path: inset(100% 0 0 0);
+    translate: 0 40%;
+  }
 }

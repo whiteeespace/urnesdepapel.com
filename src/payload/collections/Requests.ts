@@ -8,32 +8,59 @@ const TYPE_LABELS: Record<string, string> = {
   question: "Poser une question",
 };
 
-// Emails the studio when a visitor sends a request. Replies go straight to the visitor.
+// Emails the studio when a visitor sends a request: to the address set for requests, or the public
+// email when none is set. Replies go straight to the visitor. Sending never blocks saving the request.
 const notifyStudio: CollectionAfterChangeHook = async ({ doc, operation, req }) => {
   if (operation !== "create") return doc;
 
   try {
     const settings = await req.payload.findGlobal({ slug: "site-settings", depth: 0, req });
-    const to = settings.notificationEmail;
-    if (!to) return doc;
+    const to = settings.notificationEmail || settings.email;
+    if (!to) {
+      req.payload.logger.warn("No address set to receive requests (Site settings); none was emailed.");
+      return doc;
+    }
 
-    const urn =
-      typeof doc.urn === "object" && doc.urn
-        ? (doc.urn as { title?: string }).title
-        : doc.urn
-          ? `#${doc.urn}`
-          : "—";
+    // The request is saved with ids only; look up the urn's collection and number, and the options.
+    const urnId = typeof doc.urn === "object" && doc.urn ? doc.urn.id : doc.urn;
+    const urn = urnId
+      ? await req.payload.findByID({ collection: "urns", id: urnId, depth: 1, locale: "fr", req })
+      : undefined;
+    const model = urn && typeof urn.model === "object" ? urn.model : undefined;
+    const urnLabel = urn
+      ? [model?.name, `#${String(urn.number).padStart(2, "0")}`, urn.colour].filter(Boolean).join(" · ")
+      : "—";
+
+    const optionIds = ((doc.options ?? []) as (number | { id: number })[]).map((o) =>
+      typeof o === "object" ? o.id : o
+    );
+    const options = optionIds.length
+      ? (
+          await req.payload.find({
+            collection: "pricing-options",
+            where: { id: { in: optionIds } },
+            depth: 0,
+            locale: "fr",
+            limit: optionIds.length,
+            req,
+          })
+        ).docs.map((option) => option.name)
+      : [];
+
     const adminUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/admin/collections/requests/${doc.id}`;
     const lines = [
       `Type : ${TYPE_LABELS[doc.type as string] ?? doc.type}`,
-      `Urne : ${urn}`,
+      `Urne : ${urnLabel}`,
+      `Options : ${options.length ? options.join(", ") : "—"}`,
+      `Estimation : ${doc.estimate || "—"}`,
+      `Date souhaitée : ${doc.preferredDate ? String(doc.preferredDate).slice(0, 10) : "—"}`,
+      "",
       `Nom : ${doc.name}`,
       `Courriel : ${doc.email}`,
       `Téléphone : ${doc.phone || "—"}`,
-      `Date souhaitée : ${doc.preferredDate ? String(doc.preferredDate).slice(0, 10) : "—"}`,
-      `Langue : ${doc.locale}`,
+      `Langue : ${doc.locale === "en" ? "anglais" : "français"}`,
       "",
-      doc.message || "",
+      doc.message || "(aucun message)",
       "",
       `Voir dans l’admin : ${adminUrl}`,
     ];

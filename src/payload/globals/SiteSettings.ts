@@ -24,8 +24,8 @@ export const SiteSettings: GlobalConfig = {
       label: { fr: "Recevoir les demandes à", en: "Send requests to" },
       admin: {
         description: {
-          fr: "Chaque nouvelle demande du formulaire est envoyée à cette adresse.",
-          en: "Each new request from the form is emailed to this address.",
+          fr: "Chaque nouvelle demande du formulaire est envoyée à cette adresse (ou au courriel public si elle est vide).",
+          en: "Each new request from the form is emailed to this address (or to the public email if left empty).",
         },
       },
     },

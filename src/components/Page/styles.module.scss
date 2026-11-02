@@ -4,7 +4,11 @@
   display: flex;
   flex-direction: column;
   gap: var(--section-gap);
-  padding-block: clamp(36px, 6vw, 72px) clamp(56px, 8vw, 96px);
+  padding-block: clamp(24px, 4vw, 48px) clamp(56px, 8vw, 96px);
+}
+
+.fill {
+  min-height: calc(100svh - var(--bar-height));
 }
 
 .header {
@@ -18,23 +22,10 @@
     margin-bottom: calc(#{fig(28)} - var(--section-gap));
   }
 
-  // Intro text keeps a readable measure; the title may run wider.
+  // Intro text may run past the title but keeps a readable measure, about 60 characters a line.
+  // In em, so it follows each element's own size.
   > :not(h1) {
-    max-width: 46rem;
-  }
-}
-
-.breadcrumbs {
-  @include label;
-
-  a {
-    color: var(--color-muted);
-    text-decoration: none;
-
-    &:hover {
-      color: var(--color-ink);
-      text-decoration: underline;
-    }
+    max-width: 32em;
   }
 }
 
@@ -42,13 +33,23 @@
   @include title;
   margin-bottom: fig(12);
 
+  // On phones a text title stays on one line: no larger than usual, but small enough that all its
+  // letters fit across the page (each takes about 0.78 em with the wide spacing).
+  @include below($phone) {
+    font-size: min(
+      calc((100vw - 2 * var(--gutter)) * 0.11),
+      calc((100vw - 2 * var(--gutter)) / (var(--title-chars, 1) * 0.78))
+    );
+    white-space: nowrap;
+  }
+
   // Text titles are trimmed to the box of the home page's SVG lettering, so the title and what
   // follows land in the same place: the font's side bearing before the first letter and the line
   // box below the baseline are taken back (measured in the browser). On the right the box may
   // reach past the edge by the last letter's side bearing and tracking (0.155 em, plus a hair for
   // the font's rounded spacing), so a line whose letters fill the width, like DE PAPEL on phones,
-  // still fits.
-  &:not(:has(svg)) {
+  // still fits. (Lettering tucked inside a span is a phone-only stand-in, so the text is still trimmed.)
+  &:not(:has(> svg)) {
     @include cap-trim;
     max-width: none;
     margin-right: -0.175em;

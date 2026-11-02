@@ -12,6 +12,10 @@
       transform: translateY(-4px);
     }
 
+    .figure img {
+      scale: 1.04;
+    }
+
     .name {
       text-decoration: underline;
       text-underline-offset: 0.2em;
@@ -32,6 +36,12 @@
   max-width: calc(100% - #{fig(28)});
   @include label;
   text-align: right;
+
+  // White reads best on the photos, which are mostly dark; the drawn placeholder keeps the muted grey.
+  &.onPhoto {
+    color: #fff;
+    text-shadow: 0 1px 6px rgb(0 0 0 / 0.35);
+  }
 
   // Two cards across: smaller so most colourways stay on one line above the drawing.
   @include below($tablet) {

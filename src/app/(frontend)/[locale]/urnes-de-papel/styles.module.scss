@@ -1,5 +1,11 @@
 @use "mixins" as *;
 
+// More room after the last section than other pages, so it doesn't run straight into the footer.
+// Doubled to outrank the page's own padding.
+.page.page {
+  padding-bottom: clamp(96px, 14vw, 200px);
+}
+
 // The founding statement under the title.
 .statement {
   @include description;
@@ -27,23 +33,11 @@
   }
 }
 
-// Introduced by a short gold line of fibres, like the notes.
 .heading {
   @include heading;
-  display: flex;
-  flex-direction: column;
-  gap: fig(10);
   margin: 0 0 0.25em;
   font-size: fig(18);
   line-height: 1.3;
-
-  &::before {
-    content: "";
-    width: fig(28);
-    height: fig(6);
-    color: var(--color-gold);
-    @include fibres;
-  }
 }
 
 @include below($tablet) {

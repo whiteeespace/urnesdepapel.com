@@ -1,32 +1,42 @@
 import classNames from "classnames";
-import type { PropsWithChildren, ReactNode } from "react";
+import type { CSSProperties, PropsWithChildren, ReactNode } from "react";
 
 import Container from "@/components/Container";
 
 import styles from "./styles.module.scss";
 
-export const Page = ({ children, className }: PropsWithChildren<{ className?: string }>) => (
-  <Container className={classNames(styles.page, className)}>{children}</Container>
+interface PageProps {
+  className?: string;
+  /** At least as tall as the screen under the header, so the footer only shows on scrolling. */
+  fill?: boolean;
+}
+
+export const Page = ({ children, className, fill }: PropsWithChildren<PageProps>) => (
+  <Container className={classNames(styles.page, fill && styles.fill, className)}>{children}</Container>
 );
 
 interface HeaderProps {
-  /** Shown under the title, so every page title starts at the same height. */
-  breadcrumbs?: ReactNode;
   title?: ReactNode;
   titleClassName?: string;
   className?: string;
 }
 
 export const PageHeader = ({
-  breadcrumbs,
   title,
   titleClassName,
   className,
   children,
 }: PropsWithChildren<HeaderProps>) => (
   <header className={classNames(styles.header, className)}>
-    {title && <h1 className={classNames(styles.title, titleClassName)}>{title}</h1>}
-    {breadcrumbs && <div className={styles.breadcrumbs}>{breadcrumbs}</div>}
+    {title && (
+      <h1
+        className={classNames(styles.title, titleClassName)}
+        // The title's length, so on phones it can be sized to fit on one line.
+        style={typeof title === "string" ? ({ "--title-chars": title.length } as CSSProperties) : undefined}
+      >
+        {title}
+      </h1>
+    )}
     {children}
   </header>
 );

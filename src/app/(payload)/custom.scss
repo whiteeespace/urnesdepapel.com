@@ -1,0 +1,11 @@
+// Payload lists every collection's group before any global's, so Pages (globals only) would come last.
+// On the dashboard and in the side menu, Requests, Catalogue and Pages are pulled to the front in that
+// order, and Content and Settings follow. Each group is recognised by a page it holds.
+.collections__group,
+.nav-group {
+  &:has(a[href$="/collections/requests"]),
+  &:has(a[href$="/collections/urns"]),
+  &:has(a[href$="/globals/home-page"]) {
+    order: -1;
+  }
+}

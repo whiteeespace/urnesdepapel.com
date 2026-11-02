@@ -1,12 +1,13 @@
 @use "mixins" as *;
 
-// A calendar card in the form's colours: square corners, serif month names, the chosen day in ink.
+// A compact calendar card in the form's colours: square corners, month names in the sans, the chosen
+// day in ink. Days are wider than tall, so six weeks take little height.
 .root {
   width: fit-content;
   max-width: 100%;
-  padding: 20px 24px 24px;
+  padding: 12px 18px 14px;
   border: 1px solid var(--color-field);
-  background: rgb(255 255 255 / 0.45);
+  background: var(--color-paper);
 }
 
 .months {
@@ -27,8 +28,8 @@
 .navButton {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   padding: 0;
   border: 1px solid var(--color-field);
   background: none;
@@ -49,7 +50,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-gold-ink);
+    outline: 2px solid var(--color-ink);
     outline-offset: 2px;
   }
 }
@@ -67,13 +68,16 @@
 .caption {
   display: flex;
   align-items: center;
-  height: 36px;
-  margin-bottom: 12px;
+  height: 30px;
+  margin-bottom: 4px;
 }
 
 .captionLabel {
-  @include heading;
-  font-size: fig(16);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: fig(13);
+  line-height: 1.4;
+  color: var(--color-ink);
 
   &::first-letter {
     text-transform: uppercase;
@@ -85,8 +89,8 @@
 }
 
 .weekday {
-  width: 44px;
-  height: 32px;
+  width: 42px;
+  height: 24px;
   padding: 0;
   font-family: var(--font-label);
   font-weight: 400;
@@ -96,9 +100,9 @@
 }
 
 .day {
-  width: 44px;
-  height: 44px;
-  padding: 2px;
+  width: 42px;
+  height: 32px;
+  padding: 1px;
   text-align: center;
 }
 
@@ -124,15 +128,15 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--color-gold-ink);
+    outline: 2px solid var(--color-ink);
     outline-offset: 1px;
   }
 }
 
-// Today is underlined in gold.
+// Today is underlined.
 .today .dayButton {
   text-decoration: underline;
-  text-decoration-color: var(--color-gold);
+  text-decoration-color: var(--color-ink-80);
   text-decoration-thickness: 2px;
   text-underline-offset: 0.35em;
 }
@@ -176,7 +180,6 @@
     width: auto;
   }
 
-  // Table cells ignore aspect-ratio, so the day itself stays square, as on desktop.
   .day {
     height: auto;
   }
@@ -184,8 +187,7 @@
   .dayButton {
     display: block;
     max-width: 44px;
-    height: auto;
+    height: 38px;
     margin-inline: auto;
-    aspect-ratio: 1;
   }
 }

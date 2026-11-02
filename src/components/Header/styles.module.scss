@@ -1,64 +1,48 @@
 @use "mixins" as *;
 
-// A slim bar that stays at the top while the page scrolls under it.
+// A slim bar that stays at the top while the page scrolls under it, on plain paper so nothing shows
+// through. Its words and logo are in the darkest ink.
 .header {
-  --logo-h: 76px;
-  --pad-top: 8px;
-  --header-h: 92px;
+  --logo-h: 72px;
+  --header-h: var(--bar-height);
+  --nav-gap: clamp(24px, 2.8vw, 48px);
 
   position: sticky;
   top: 0;
   z-index: 20;
   height: var(--header-h);
-  background: transparent;
-  // The page shows through, so only the logo and links take clicks; the rest of the band
-  // lets clicks reach the content scrolling underneath.
-  pointer-events: none;
-
-  .skip,
-  .home,
-  .nav {
-    pointer-events: auto;
-  }
+  background: var(--paper-texture), var(--color-paper);
 
   @include below($nav) {
-    --logo-h: 60px;
-    --pad-top: 6px;
-    --header-h: 72px;
-  }
-
-  // With the phone menu open the bar turns to paper, so the page no longer shows behind it.
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: var(--paper-texture), var(--color-paper);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  &:has([aria-expanded="true"])::before {
-    opacity: 1;
+    --logo-h: 54px;
   }
 }
 
+// Fully hidden (not just moved above the page, where a phone's bounce at the top could show it) until
+// reached with the keyboard; a click or page change that happens to focus it doesn't show it.
 .skip {
   position: absolute;
-  left: var(--gutter);
-  top: -100px;
+  left: var(--bar-edge);
+  top: 10px;
   z-index: 30;
-  padding: 10px 14px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
   background: var(--color-ink);
   color: var(--color-paper);
   @include nav-link;
 
-  &:focus {
-    top: 10px;
+  &:focus-visible {
+    width: auto;
+    height: auto;
+    padding: 10px 14px;
+    clip-path: none;
   }
 }
 
-// The logo is placed on its own; the navigation sits at the top right. The phone menu
+// The logo on the left and the words on the right share one line, like a running head. The phone menu
 // panel is positioned against this box.
 .inner {
   position: relative;
@@ -68,16 +52,16 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
-  padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px))
-    max(var(--gutter), env(safe-area-inset-right, 0px));
+  padding-inline: max(var(--bar-edge), env(safe-area-inset-left, 0px))
+    max(var(--bar-edge), env(safe-area-inset-right, 0px));
 }
 
 .home {
   position: absolute;
   z-index: 1;
-  top: var(--pad-top);
-  left: max(var(--gutter), env(safe-area-inset-left, 0px));
-  color: var(--color-ink-80);
+  top: calc((var(--header-h) - var(--logo-h)) / 2);
+  left: max(var(--bar-edge), env(safe-area-inset-left, 0px));
+  color: var(--color-ink);
   transition: color 0.3s ease;
 
   &:hover,
@@ -97,7 +81,7 @@
   height: var(--header-h);
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: var(--nav-gap);
 }
 
 .menu {
@@ -106,14 +90,14 @@
 }
 
 // The side padding is pulled back into the gutter so the word lines up with the page edge;
-// it only shows on keyboard focus, which fills the button gold like the request link.
+// it only shows on keyboard focus, which fills the button gold.
 .menuButton {
   display: none;
   margin-inline-end: calc(#{fig(8)} * -1);
   padding: fig(2) fig(8);
   background: none;
   border: 0;
-  color: var(--color-ink-80);
+  color: var(--color-ink);
   cursor: pointer;
   @include nav-link;
 
@@ -127,13 +111,13 @@
 .panel {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: var(--nav-gap);
 }
 
 .links {
   display: flex;
   align-items: center;
-  gap: 14px 30px;
+  gap: 14px var(--nav-gap);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -141,86 +125,19 @@
 
 .link {
   @include nav-link;
-  position: relative;
-  color: var(--color-ink-80);
+  color: var(--color-ink);
   text-decoration: none;
-  transition: color 0.3s ease;
-
-  // The current page stays gold, like the logo on hover.
-  &[aria-current="page"] {
-    color: var(--color-gold);
-  }
-
-  // On hover the fibres draw in under the word, left to right like a pen stroke.
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: calc(100% + 1px);
-    width: 100%;
-    height: 0.4em;
-    pointer-events: none;
-    clip-path: inset(0 100% 0 0);
-    transition: clip-path 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-    @include fibres;
-  }
-
-  &:hover::after,
-  &:focus-visible::after {
-    clip-path: inset(0);
-  }
 }
 
-.request {
-  padding: fig(4) fig(8);
-
-  // The filled button has its own hover, so no fibres under it.
-  &::after {
-    content: none;
-  }
-  background: var(--color-gold);
-  color: var(--color-paper);
-
-  &:hover {
-    background: var(--color-gold-ink);
+// On wide screens the four words sit together at the right, about a word and a half apart.
+@include above($nav) {
+  .links {
+    column-gap: 1.5em;
+    font-size: var(--bar-size);
   }
 
-  // On the request page itself it looks the same as anywhere else.
-  &:hover,
-  &[aria-current="page"] {
-    color: var(--color-paper);
-  }
-}
-
-.locales {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  @include nav-link;
-  color: var(--color-muted);
-}
-
-.localeItem {
-  display: inline-flex;
-  gap: 6px;
-}
-
-.locale {
-  font: inherit;
-  color: var(--color-ink-80);
-  background: none;
-  border: 0;
-  padding: 2px;
-  cursor: pointer;
-  transition: color 0.3s ease;
-
-  &:hover,
-  &:focus-visible {
-    color: var(--color-gold);
-  }
-
-  &[aria-pressed="true"] {
-    color: var(--color-muted);
+  .link {
+    font-size: var(--bar-size);
   }
 }
 
@@ -229,12 +146,14 @@
     display: block;
   }
 
-  // Drops down under the header, unrolling from the top; the links follow one after another.
+  // Drops down under the header and fills the rest of the screen, unrolling from the top; the links
+  // follow one after another.
   .panel {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
+    height: calc(100svh - var(--header-h));
     flex-direction: column;
     align-items: flex-start;
     gap: 36px;
@@ -242,8 +161,7 @@
     // Continues the bar's paper without a seam.
     background: var(--paper-texture), var(--color-paper);
     background-position: 0 calc(var(--header-h) * -1);
-    box-shadow: 0 28px 32px -28px rgb(42 41 38 / 0.12);
-    clip-path: inset(0 0 -60px 0);
+    clip-path: inset(0);
     transition:
       clip-path 0.45s cubic-bezier(0.22, 1, 0.36, 1),
       visibility 0s;
@@ -263,8 +181,7 @@
     gap: fig(12);
   }
 
-  .links > li,
-  .locales {
+  .links > li {
     transition:
       opacity 0.35s ease,
       translate 0.45s cubic-bezier(0.22, 1, 0.36, 1);
@@ -283,22 +200,11 @@
     }
   }
 
-  .locales {
-    transition-delay: 0.26s;
-  }
-
-  // Set like the collection names, much larger than the inline links.
+  // The same plain words, much larger than the inline links and a weight lighter to suit the size.
   .link {
-    font-family: var(--font-serif);
-    font-weight: 500;
+    font-weight: 400;
     font-size: fig(26);
-    line-height: 1.3;
-  }
-
-  .request {
-    display: inline-block;
-    margin-top: fig(8);
-    padding: fig(2) fig(12) fig(4);
+    line-height: 1.2;
   }
 }
 
@@ -307,7 +213,6 @@
   .panel,
   .panel[data-open="false"],
   .links > li,
-  .locales,
   .link::after {
     transition-duration: 0s !important;
     transition-delay: 0s !important;

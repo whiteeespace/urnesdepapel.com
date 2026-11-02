@@ -162,7 +162,10 @@ const RequestForm = ({ urns, options, basePrice, initialUrn, phone }: Props) => 
   const [sentTo, setSentTo] = useState<string | null>(null);
   const initialModel = urns.find((urn) => String(urn.number) === initialUrn)?.modelName ?? null;
   const [model, setModel] = useState<string | null>(initialModel);
-  const [step, setStep] = useState<StepId>("type");
+  // Coming from an urn's page, the request, model and colour are already answered: start at the
+  // personalizations, with the earlier steps still there to revisit.
+  const initialStep: StepId = initialModel ? "options" : "type";
+  const [step, setStep] = useState<StepId>(initialStep);
   const formRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const moved = useRef(false);
@@ -311,7 +314,7 @@ const RequestForm = ({ urns, options, basePrice, initialUrn, phone }: Props) => 
               setSentTo(null);
               setModel(initialModel);
               moved.current = false;
-              setStep("type");
+              setStep(initialStep);
             }}
           >
             {t("done.again")}

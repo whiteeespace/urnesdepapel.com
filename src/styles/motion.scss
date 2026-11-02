@@ -1,0 +1,20 @@
+// Motion shared across the site, all of it skipped when the visitor asks for reduced motion.
+
+@media (prefers-reduced-motion: no-preference) {
+  // Blocks marked data-reveal rise into place as they scroll into view. Browsers without
+  // scroll-driven animations simply show them.
+  @supports (animation-timeline: view()) {
+    [data-reveal] {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 32px;
+  }
+}

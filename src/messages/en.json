@@ -37,13 +37,7 @@
     "basePrice": "Base price",
     "unique": "A one-of-a-kind piece, shaped by hand. Relief and texture vary from urn to urn.",
     "request": "Request this urn",
-    "previous": "Previous urn",
-    "next": "Next urn",
-    "views": {
-      "front": "front",
-      "detail": "detail",
-      "opening": "opening"
-    }
+    "back": "Back"
   },
   "pricing": {
     "options": "Additional options",

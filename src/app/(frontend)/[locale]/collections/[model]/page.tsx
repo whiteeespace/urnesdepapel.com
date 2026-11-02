@@ -4,7 +4,6 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 
 import { Page, PageHeader } from "@/components/Page";
 import UrnCard from "@/components/UrnCard";
-import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
 import { asModel } from "@/lib/content";
 import { getModels, getUrns } from "@/lib/payload";
@@ -48,14 +47,7 @@ const CollectionPage = async ({ params }: Props) => {
 
   return (
     <Page>
-      <PageHeader
-        breadcrumbs={
-          <>
-            <Link href="/">{t("collections")}</Link> / {model.name.toLowerCase()}
-          </>
-        }
-        title={model.name}
-      >
+      <PageHeader title={model.name}>
         {model.intro ? (
           <p className={styles.intro}>{model.intro}</p>
         ) : (
