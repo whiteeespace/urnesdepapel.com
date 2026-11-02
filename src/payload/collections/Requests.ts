@@ -1,5 +1,7 @@
 import type { CollectionAfterChangeHook, CollectionConfig } from "payload";
 
+import { siteUrl } from "@/lib/site-url";
+
 import { authenticated } from "../access";
 
 const TYPE_LABELS: Record<string, string> = {
@@ -47,7 +49,7 @@ const notifyStudio: CollectionAfterChangeHook = async ({ doc, operation, req }) 
         ).docs.map((option) => option.name)
       : [];
 
-    const adminUrl = `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/admin/collections/requests/${doc.id}`;
+    const adminUrl = `${siteUrl}/admin/collections/requests/${doc.id}`;
     const lines = [
       `Type : ${TYPE_LABELS[doc.type as string] ?? doc.type}`,
       `Urne : ${urnLabel}`,
