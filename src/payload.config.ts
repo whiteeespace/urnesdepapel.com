@@ -55,6 +55,9 @@ export default buildConfig({
   plugins: [
     vercelBlobStorage({
       enabled: Boolean(process.env.BLOB_READ_WRITE_TOKEN),
+      // Keep the plugin's columns even where Blob is off (locally), so the database schema and the
+      // migrations are the same everywhere.
+      alwaysInsertFields: true,
       collections: { media: true },
       token: process.env.BLOB_READ_WRITE_TOKEN ?? "",
     }),

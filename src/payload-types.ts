@@ -219,6 +219,8 @@ export interface Media {
    * Describes the image for people who can’t see it, e.g. “Papillon urn no. 23, front view”.
    */
   alt: string;
+  prefix?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -475,6 +477,8 @@ export interface PricingOptionsSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  prefix?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

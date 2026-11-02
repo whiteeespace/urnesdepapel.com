@@ -39,7 +39,9 @@ interface Catalogue {
 }
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const context = { disableRevalidate: true };
+// A fresh context for every call: Payload hooks (the Blob storage plugin among them) keep per-call
+// state on it, so sharing one object between calls leaks one upload's file into the next.
+const context = () => ({ disableRevalidate: true });
 
 const loadCatalogue = async (): Promise<Catalogue> =>
   JSON.parse(await readFile(path.resolve(dirname, "../../content/urns.json"), "utf8")) as Catalogue;
@@ -52,12 +54,12 @@ const upsert = async (
   fr: Record<string, unknown>,
   en: Record<string, unknown>
 ): Promise<{ id: number }> => {
-  const existing = await payload.find({ collection, where, limit: 1, depth: 0, context });
+  const existing = await payload.find({ collection, where, limit: 1, depth: 0, context: context() });
   const current = existing.docs[0];
   const doc = current
-    ? await payload.update({ collection, id: current.id, data: fr as never, locale: "fr", context })
-    : await payload.create({ collection, data: fr as never, locale: "fr", context });
-  await payload.update({ collection, id: doc.id, data: en as never, locale: "en", context });
+    ? await payload.update({ collection, id: current.id, data: fr as never, locale: "fr", context: context() })
+    : await payload.create({ collection, data: fr as never, locale: "fr", context: context() });
+  await payload.update({ collection, id: doc.id, data: en as never, locale: "en", context: context() });
   return doc;
 };
 
@@ -70,7 +72,7 @@ const uploadPhotos = async (payload: Payload): Promise<Record<string, number>> =
       where: { filename: { equals: filename } },
       limit: 1,
       depth: 0,
-      context,
+      context: context(),
     });
     const doc =
       existing.docs[0] ??
@@ -79,10 +81,10 @@ const uploadPhotos = async (payload: Payload): Promise<Record<string, number>> =
         data: { alt: alt.fr },
         filePath: path.resolve(dirname, "../../content/photos", filename),
         locale: "fr",
-        context,
+        context: context(),
       }));
-    await payload.update({ collection: "media", id: doc.id, data: { alt: alt.fr }, locale: "fr", context });
-    await payload.update({ collection: "media", id: doc.id, data: { alt: alt.en }, locale: "en", context });
+    await payload.update({ collection: "media", id: doc.id, data: { alt: alt.fr }, locale: "fr", context: context() });
+    await payload.update({ collection: "media", id: doc.id, data: { alt: alt.en }, locale: "en", context: context() });
     ids[filename] = doc.id;
   }
   return ids;
@@ -156,7 +158,7 @@ const seed = async () => {
       collection: "pricing-options",
       id: optionIds["pouch-custom"],
       data: { requires: optionIds.pouch },
-      context,
+      context: context(),
     });
   }
 
@@ -164,7 +166,7 @@ const seed = async () => {
   await payload.updateGlobal({
     slug: "site-settings",
     locale: "fr",
-    context,
+    context: context(),
     data: {
       phone: copy.settings.phone,
       etsyUrl: copy.settings.etsyUrl,
@@ -176,7 +178,7 @@ const seed = async () => {
   await payload.updateGlobal({
     slug: "site-settings",
     locale: "en",
-    context,
+    context: context(),
     data: {
       descriptor: copy.settings.descriptor.en,
       leadTimeNote: copy.settings.leadTimeNote.en,
@@ -184,13 +186,13 @@ const seed = async () => {
     },
   });
 
-  await payload.updateGlobal({ slug: "home-page", locale: "fr", context, data: { intro: copy.home.intro.fr } });
-  await payload.updateGlobal({ slug: "home-page", locale: "en", context, data: { intro: copy.home.intro.en } });
+  await payload.updateGlobal({ slug: "home-page", locale: "fr", context: context(), data: { intro: copy.home.intro.fr } });
+  await payload.updateGlobal({ slug: "home-page", locale: "en", context: context(), data: { intro: copy.home.intro.en } });
 
   const aboutFr = await payload.updateGlobal({
     slug: "about-page",
     locale: "fr",
-    context,
+    context: context(),
     data: {
       statement: copy.about.statement.fr,
       sections: copy.about.sections.map((s) => ({
@@ -203,7 +205,7 @@ const seed = async () => {
   await payload.updateGlobal({
     slug: "about-page",
     locale: "en",
-    context,
+    context: context(),
     data: {
       statement: copy.about.statement.en,
       sections: (aboutFr.sections ?? []).map((row, i) => ({
@@ -218,7 +220,7 @@ const seed = async () => {
     await payload.updateGlobal({
       slug: "pricing-page",
       locale,
-      context,
+      context: context(),
       data: {
         baseTitle: copy.pricing.baseTitle[locale],
         baseDescription: copy.pricing.baseDescription[locale],
@@ -229,13 +231,13 @@ const seed = async () => {
     await payload.updateGlobal({
       slug: "artisan-page",
       locale,
-      context,
+      context: context(),
       data: { name: copy.artisan.name, bio: copy.artisan.bio[locale] },
     });
     await payload.updateGlobal({
       slug: "request-page",
       locale,
-      context,
+      context: context(),
       data: { intro: copy.request.intro[locale] },
     });
   }
