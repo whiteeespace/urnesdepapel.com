@@ -45,6 +45,14 @@ const AboutPage = async ({ params }: Props) => {
         <div className={styles.sections}>
           {about.sections.map((section) => (
             <section key={section.id} className={styles.section} data-reveal>
+              {asMedia(section.image) && (
+                <UrnFigure
+                  media={asMedia(section.image)}
+                  ratio="wide"
+                  sizes="(max-width: 860px) 100vw, 33vw"
+                  className={styles.sectionImage}
+                />
+              )}
               <h2 className={styles.heading}>{section.heading}</h2>
               <Paragraphs text={section.body} />
               {section.linkToPricing && <TextLink href="/tarifs">{t("customizationOptions")} →</TextLink>}

@@ -17,7 +17,6 @@ export const SiteSettings: GlobalConfig = {
         { name: "email", type: "email", label: { fr: "Courriel public", en: "Public email" } },
       ],
     },
-    { name: "etsyUrl", type: "text", label: { fr: "Lien de la boutique Etsy", en: "Etsy shop link" } },
     {
       name: "notificationEmail",
       type: "email",

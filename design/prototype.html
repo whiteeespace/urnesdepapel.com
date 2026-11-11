@@ -326,7 +326,6 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--i
       "Suzanne Desbiens is a member of the IAPMA, International Association of Paper Maker Artists."
     ]],
     descriptor: ["Urnes funéraires biodégradables fabriquées à la main", "Handmade biodegradable funeral urns"],
-    etsy: ["Boutique Etsy", "Etsy shop"],
     rights: ["© 2026 Tous droits réservés Urnes de papel", "© 2026 All rights reserved Urnes de papel"],
     reqTitle: ["Faire une demande", "Make a request"],
     reqIntro: ["Chaque urne est façonnée à la main. Décrivez ce que vous souhaitez, à votre rythme ; Suzanne Desbiens vous répondra personnellement.", "Every urn is shaped by hand. Describe what you would like, in your own time; Suzanne Desbiens will reply to you personally."],
@@ -444,7 +443,6 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--i
       <div class="contact-info">
         <span class="caps muted">${t("descriptor")}</span>
         <span class="tel">514 978 0118</span>
-        <a class="link" href="https://www.etsy.com/shop/Urnesdepapel" target="_blank" rel="noopener">${t("etsy")} ↗</a>
         <div class="row" style="margin-top:8px"><a class="btn" href="#demande" data-go="demande">${t("navRequest")}</a></div>
       </div>
     </div>
@@ -592,7 +590,7 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--i
     document.documentElement.lang = lang;
     document.getElementById("proto").textContent = t("proto");
     document.getElementById("head").innerHTML = `${logo()}<nav class="nav caps" aria-label="Navigation">${NAV.map(([r, k]) => `<a href="#${r}" data-go="${r}" ${route === r ? 'aria-current="page"' : ""}>${t(k)}</a>`).join("")}<a class="btn-line" href="#demande" data-go="demande" ${route === "demande" ? 'aria-current="page"' : ""}>${t("navRequest")}</a><span class="lang"><button type="button" data-lang="fr" aria-pressed="${lang === "fr"}">fr</button>/<button type="button" data-lang="en" aria-pressed="${lang === "en"}">en</button></span></nav>`;
-    document.getElementById("foot").innerHTML = `<span>${t("rights")}</span><span>514 978 0118 · <a href="https://www.etsy.com/shop/Urnesdepapel" target="_blank" rel="noopener">${t("etsy")} ↗</a></span>`;
+    document.getElementById("foot").innerHTML = `<span>${t("rights")}</span><span>514 978 0118</span>`;
   };
   const renderMain = () => {
     const main = document.getElementById("main");

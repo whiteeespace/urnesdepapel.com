@@ -32,6 +32,7 @@ const ArtisanPage = async ({ params }: Props) => {
   setRequestLocale(locale);
 
   const [t, page] = await Promise.all([getTranslations(), getPage("artisan-page", locale)]);
+  const gallery = (page.gallery ?? []).map(asMedia).filter((media) => media !== undefined);
 
   return (
     <Page>
@@ -51,6 +52,20 @@ const ArtisanPage = async ({ params }: Props) => {
           </div>
         </section>
       </div>
+      {gallery.length > 0 && (
+        <section aria-labelledby="studio-heading" className={styles.studio} data-reveal>
+          <h2 id="studio-heading" className={styles.studioHeading}>
+            {t("artisan.studio")}
+          </h2>
+          <ul className={styles.gallery}>
+            {gallery.map((media) => (
+              <li key={media.id}>
+                <UrnFigure media={media} sizes="(max-width: 860px) 100vw, 33vw" />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </Page>
   );
 };

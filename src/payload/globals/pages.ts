@@ -55,6 +55,18 @@ export const AboutPage = page(
           admin: { description: paragraphsHint },
         },
         {
+          name: "image",
+          type: "upload",
+          relationTo: "media",
+          label: { fr: "Photo", en: "Photo" },
+          admin: {
+            description: {
+              fr: "Facultative. Elle s’affiche au-dessus du titre de la section.",
+              en: "Optional. It is shown above the section heading.",
+            },
+          },
+        },
+        {
           name: "linkToPricing",
           type: "checkbox",
           label: { fr: "Ajouter un lien vers les tarifs", en: "Add a link to pricing" },
@@ -101,6 +113,19 @@ export const ArtisanPage = page("artisan-page", { fr: "L’artisane", en: "The a
     admin: { description: paragraphsHint },
   },
   { name: "portrait", type: "upload", relationTo: "media", label: { fr: "Portrait", en: "Portrait" } },
+  {
+    name: "gallery",
+    type: "upload",
+    relationTo: "media",
+    hasMany: true,
+    label: { fr: "Photos de l’atelier", en: "Studio photos" },
+    admin: {
+      description: {
+        fr: "Affichées sous la biographie, dans cet ordre. Trois photos remplissent une rangée.",
+        en: "Shown under the biography, in this order. Three photos fill a row.",
+      },
+    },
+  },
 ]);
 
 export const RequestPage = page("request-page", { fr: "Faire une demande", en: "Make a request" }, [

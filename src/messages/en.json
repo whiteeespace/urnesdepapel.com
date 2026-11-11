@@ -27,8 +27,7 @@
     "photo": "photo",
     "toBeWritten": "Introduction to be written.",
     "customizationOptions": "Customization options",
-    "phone": "Phone",
-    "etsy": "Etsy shop"
+    "phone": "Phone"
   },
   "urn": {
     "colour": "Colour",
@@ -124,5 +123,8 @@
     "title": "Page not found",
     "body": "This page doesn’t exist or has moved.",
     "back": "Back to the collections"
+  },
+  "artisan": {
+    "studio": "In the studio"
   }
 }
