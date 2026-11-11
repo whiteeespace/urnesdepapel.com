@@ -18,11 +18,6 @@ const Footer = async () => {
             <span className={styles.phone}>{settings.phone.trim().replace(/\s+/g, "-")}</span>
           )}
           {settings.email && <a href={`mailto:${settings.email}`}>{settings.email}</a>}
-          {settings.etsyUrl && (
-            <a href={settings.etsyUrl} target="_blank" rel="noopener">
-              {t("common.etsy")} ↗
-            </a>
-          )}
           <LocaleSwitcher />
         </span>
         <span className={styles.rights}>{t("footer.rights", { year: new Date().getFullYear() })}</span>

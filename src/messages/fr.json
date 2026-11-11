@@ -27,8 +27,7 @@
     "photo": "photo",
     "toBeWritten": "Texte de présentation à rédiger.",
     "customizationOptions": "Options de personnalisation",
-    "phone": "Téléphone",
-    "etsy": "Boutique Etsy"
+    "phone": "Téléphone"
   },
   "urn": {
     "colour": "Couleur",
@@ -124,5 +123,8 @@
     "title": "Page introuvable",
     "body": "Cette page n’existe pas ou a été déplacée.",
     "back": "Retour aux collections"
+  },
+  "artisan": {
+    "studio": "À l’atelier"
   }
 }

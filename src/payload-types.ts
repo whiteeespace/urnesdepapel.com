@@ -614,6 +614,10 @@ export interface AboutPage {
          * Leave a blank line between paragraphs.
          */
         body: string;
+        /**
+         * Optional. It is shown above the section heading.
+         */
+        image?: (number | null) | Media;
         linkToPricing?: boolean | null;
         id?: string | null;
       }[]
@@ -646,6 +650,10 @@ export interface ArtisanPage {
    */
   bio?: string | null;
   portrait?: (number | null) | Media;
+  /**
+   * Shown under the biography, in this order. Three photos fill a row.
+   */
+  gallery?: (number | Media)[] | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -667,7 +675,6 @@ export interface SiteSetting {
   id: number;
   phone?: string | null;
   email?: string | null;
-  etsyUrl?: string | null;
   /**
    * Each new request from the form is emailed to this address (or to the public email if left empty).
    */
@@ -700,6 +707,7 @@ export interface AboutPageSelect<T extends boolean = true> {
     | {
         heading?: T;
         body?: T;
+        image?: T;
         linkToPricing?: T;
         id?: T;
       };
@@ -728,6 +736,7 @@ export interface ArtisanPageSelect<T extends boolean = true> {
   name?: T;
   bio?: T;
   portrait?: T;
+  gallery?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -749,7 +758,6 @@ export interface RequestPageSelect<T extends boolean = true> {
 export interface SiteSettingsSelect<T extends boolean = true> {
   phone?: T;
   email?: T;
-  etsyUrl?: T;
   notificationEmail?: T;
   descriptor?: T;
   leadTimeNote?: T;

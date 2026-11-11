@@ -10,7 +10,7 @@ Knowledge base for the urnesdepapel.com redesign. Source files are in `docs/sour
 - **Founder / artisan:** Suzanne Desbiens, a visual artist and member of the IAPMA (International Association of Paper Maker Artists). Founded in 2013.
 - **Location:** Québec (514 area code = Montréal). Prices are in $, presumably CAD.
 - **Contact:** 514 978 0118
-- **Current sales channel:** https://www.etsy.com/shop/Urnesdepapel
+- **Previous sales channel:** an Etsy shop. The site does not link to it.
 - **Footer:** © 2026 Tous droits réservés Urnes de papel
 - **Values (mission):** empathy, respect, creativity, know-how. Eco-responsible, made with natural and non-toxic materials. The urns degrade in soil or water without leaving toxic waste.
 
@@ -99,7 +99,7 @@ Each urn has these fields: number, model, fibres, colour, materials, description
 6. Typos to fix in the EN text: "moldage" → "molding", "dead-lines times" → "lead times", "Embroder" → "Embroider", "handmade manufacture". In FR, "embosses" should be "embossés" (#44).
 7. **Currency:** is it CAD? Are taxes included? Is shipping or delivery offered?
 8. **Request form:** who receives it (which email)? Which fields are needed: urn number, options, deadline, delivery method? Does it need to work in both languages?
-9. **Etsy:** should the site keep linking to Etsy, or replace it?
+9. **Etsy:** decided. The site no longer links to Etsy; requests go through the site's form.
 10. **Photography:** are there existing photos per urn and for each option (pulp, pouch, etc.)?
 11. **Domain/email:** urnesdepapel.com. What contact email should be shown?
 12. **Fonts:** is a Fedra Serif web licence available? If not, which substitute should we use?

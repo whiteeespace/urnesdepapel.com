@@ -29,6 +29,37 @@
   }
 }
 
+// The studio photos, a row of three under the biography.
+.studio {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: clamp(56px, 8vw, 112px);
+}
+
+.studioHeading {
+  @include heading;
+  margin: 0;
+  font-size: fig(18);
+  line-height: 1.3;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2.5vw, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Three across until phones, where they stack (two across would leave the third alone).
+@include below($phone) {
+  .gallery {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @include below($tablet) {
   .artisan {
     grid-template-columns: minmax(0, 1fr);

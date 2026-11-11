@@ -77,6 +77,54 @@ export const photos: Record<string, Localized> = {
     fr: "Urne personnalisée avec l’ajout d’un texte",
     en: "Urn personalized with an added text",
   },
+  "studio-urn-wall.jpg": {
+    fr: "Urnes exposées dans des caisses de bois à l’atelier",
+    en: "Urns displayed in wooden crates at the studio",
+  },
+  "studio-urn-wall-angle.jpg": {
+    fr: "Urnes exposées dans des caisses de bois, vues de côté",
+    en: "Urns displayed in wooden crates, seen from the side",
+  },
+  "studio-urn-wall-upright.jpg": {
+    fr: "Urnes Anémone, Papillon et Tulipe dans leurs caisses de bois",
+    en: "Anémone, Papillon and Tulipe urns in their wooden crates",
+  },
+  "studio-urns-36-37-38.jpg": {
+    fr: "Urnes n° 38, 37 et 36 dans leurs caisses de bois",
+    en: "Urns no. 38, 37 and 36 in their wooden crates",
+  },
+  "studio-fibres.jpg": {
+    fr: "Fibres végétales brutes étalées sur un plancher de bois",
+    en: "Raw plant fibres spread on a wooden floor",
+  },
+  "studio-pulp.jpg": {
+    fr: "Pâte de papier teintée en bleu, tenue au-dessus de la cuve",
+    en: "Blue-tinted paper pulp held above the vat",
+  },
+  "studio-pigment-chart.jpg": {
+    fr: "Nuancier de pigments naturels à l’atelier",
+    en: "Chart of natural pigment swatches at the studio",
+  },
+  "studio-pigment-shelf.jpg": {
+    fr: "Étagères de pigments, de colles et de vernis à l’atelier",
+    en: "Shelves of pigments, glues and varnishes at the studio",
+  },
+  "suzanne-desbiens.jpg": {
+    fr: "Suzanne Desbiens devant un mur de papier fait main",
+    en: "Suzanne Desbiens in front of a wall of handmade paper",
+  },
+  "suzanne-desbiens-moulds.jpg": {
+    fr: "Suzanne Desbiens à l’atelier, près de ses moules",
+    en: "Suzanne Desbiens at the studio, beside her moulds",
+  },
+  "suzanne-desbiens-urns.jpg": {
+    fr: "Suzanne Desbiens devant ses urnes",
+    en: "Suzanne Desbiens in front of her urns",
+  },
+  "suzanne-desbiens-outdoors.jpg": {
+    fr: "Suzanne Desbiens à l’extérieur, entre deux arbres",
+    en: "Suzanne Desbiens outdoors, between two trees",
+  },
 };
 
 /** Photos per urn number, thumbnail first. Urns 21 and 22 have no photo yet. */
@@ -112,3 +160,15 @@ export const optionPhotos: Record<string, string> = {
 };
 
 export const basePhoto = "anemone-29.jpg";
+
+/** The artisan page: her portrait, then the studio photos under the biography. */
+export const artisanPhotos = {
+  portrait: "suzanne-desbiens.jpg",
+  gallery: ["suzanne-desbiens-urns.jpg", "studio-pigment-chart.jpg", "suzanne-desbiens-moulds.jpg"],
+};
+
+/** The about page: the banner, then one photo per section, in the order of copy.about.sections. */
+export const aboutPhotos = {
+  banner: "studio-fibres.jpg",
+  sections: ["studio-pulp.jpg", "studio-urn-wall.jpg", "studio-urns-36-37-38.jpg"],
+};

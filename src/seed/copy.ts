@@ -2,7 +2,6 @@
 
 export const settings = {
   phone: "514 978 0118",
-  etsyUrl: "https://www.etsy.com/shop/Urnesdepapel",
   descriptor: {
     fr: "Urnes funéraires biodégradables fabriquées à la main",
     en: "Handmade biodegradable funeral urns",

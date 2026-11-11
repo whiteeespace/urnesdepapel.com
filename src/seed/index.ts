@@ -11,7 +11,7 @@ import { getPayload, type Payload } from "payload";
 import config from "@payload-config";
 
 import * as copy from "./copy";
-import { basePhoto, modelCovers, optionPhotos, photos, urnPhotos } from "./photos";
+import { aboutPhotos, artisanPhotos, basePhoto, modelCovers, optionPhotos, photos, urnPhotos } from "./photos";
 
 type Localized = { fr: string; en: string };
 interface CatalogueUrn {
@@ -169,7 +169,6 @@ const seed = async () => {
     context: context(),
     data: {
       phone: copy.settings.phone,
-      etsyUrl: copy.settings.etsyUrl,
       descriptor: copy.settings.descriptor.fr,
       leadTimeNote: copy.settings.leadTimeNote.fr,
       seoDescription: copy.settings.seoDescription.fr,
@@ -195,9 +194,11 @@ const seed = async () => {
     context: context(),
     data: {
       statement: copy.about.statement.fr,
-      sections: copy.about.sections.map((s) => ({
+      image: media(aboutPhotos.banner),
+      sections: copy.about.sections.map((s, i) => ({
         heading: s.heading.fr,
         body: s.body.fr,
+        image: media(aboutPhotos.sections[i]),
         linkToPricing: "linkToPricing" in s ? s.linkToPricing : false,
       })),
     },
@@ -210,6 +211,7 @@ const seed = async () => {
       statement: copy.about.statement.en,
       sections: (aboutFr.sections ?? []).map((row, i) => ({
         ...row,
+        image: media(aboutPhotos.sections[i]),
         heading: copy.about.sections[i]?.heading.en ?? "",
         body: copy.about.sections[i]?.body.en ?? "",
       })),
@@ -232,7 +234,12 @@ const seed = async () => {
       slug: "artisan-page",
       locale,
       context: context(),
-      data: { name: copy.artisan.name, bio: copy.artisan.bio[locale] },
+      data: {
+        name: copy.artisan.name,
+        bio: copy.artisan.bio[locale],
+        portrait: media(artisanPhotos.portrait),
+        gallery: artisanPhotos.gallery.map(media).filter((id) => id !== undefined),
+      },
     });
     await payload.updateGlobal({
       slug: "request-page",
