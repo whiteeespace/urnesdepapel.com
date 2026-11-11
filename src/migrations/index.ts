@@ -4,6 +4,7 @@ import * as migration_20261102_155820_remove_home_values from './20261102_155820
 import * as migration_20261102_185527_media_object_key from './20261102_185527_media_object_key';
 import * as migration_20261111_023528_remove_etsy_url from './20261111_023528_remove_etsy_url';
 import * as migration_20261111_025521_studio_photos from './20261111_025521_studio_photos';
+import * as migration_20261111_043223_place_studio_photos from './20261111_043223_place_studio_photos';
 
 export const migrations = [
   {
@@ -34,6 +35,11 @@ export const migrations = [
   {
     up: migration_20261111_025521_studio_photos.up,
     down: migration_20261111_025521_studio_photos.down,
-    name: '20261111_025521_studio_photos'
+    name: '20261111_025521_studio_photos',
+  },
+  {
+    up: migration_20261111_043223_place_studio_photos.up,
+    down: migration_20261111_043223_place_studio_photos.down,
+    name: '20261111_043223_place_studio_photos'
   },
 ];
