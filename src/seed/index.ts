@@ -11,7 +11,8 @@ import { getPayload, type Payload } from "payload";
 import config from "@payload-config";
 
 import * as copy from "./copy";
-import { aboutPhotos, artisanPhotos, basePhoto, modelCovers, optionPhotos, photos, urnPhotos } from "./photos";
+import { context, uploadPhotos } from "./media";
+import { aboutPhotos, artisanPhotos, basePhoto, modelCovers, optionPhotos, urnPhotos } from "./photos";
 
 type Localized = { fr: string; en: string };
 interface CatalogueUrn {
@@ -39,10 +40,6 @@ interface Catalogue {
 }
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-// A fresh context for every call: Payload hooks (the Blob storage plugin among them) keep per-call
-// state on it, so sharing one object between calls leaks one upload's file into the next.
-const context = () => ({ disableRevalidate: true });
-
 const loadCatalogue = async (): Promise<Catalogue> =>
   JSON.parse(await readFile(path.resolve(dirname, "../../content/urns.json"), "utf8")) as Catalogue;
 
@@ -63,39 +60,12 @@ const upsert = async (
   return doc;
 };
 
-// Uploads each photo once (matched by filename) and returns the media ids by filename.
-const uploadPhotos = async (payload: Payload): Promise<Record<string, number>> => {
-  const ids: Record<string, number> = {};
-  for (const [filename, alt] of Object.entries(photos)) {
-    const existing = await payload.find({
-      collection: "media",
-      where: { filename: { equals: filename } },
-      limit: 1,
-      depth: 0,
-      context: context(),
-    });
-    const doc =
-      existing.docs[0] ??
-      (await payload.create({
-        collection: "media",
-        data: { alt: alt.fr },
-        filePath: path.resolve(dirname, "../../content/photos", filename),
-        locale: "fr",
-        context: context(),
-      }));
-    await payload.update({ collection: "media", id: doc.id, data: { alt: alt.fr }, locale: "fr", context: context() });
-    await payload.update({ collection: "media", id: doc.id, data: { alt: alt.en }, locale: "en", context: context() });
-    ids[filename] = doc.id;
-  }
-  return ids;
-};
-
 const seed = async () => {
   const payload = await getPayload({ config });
   const catalogue = await loadCatalogue();
 
   payload.logger.info("Uploading photos…");
-  const mediaIds = await uploadPhotos(payload);
+  const mediaIds = await uploadPhotos(payload, { refreshAlt: true });
   const media = (filename: string | undefined) => (filename ? mediaIds[filename] : undefined);
 
   payload.logger.info("Seeding collections…");
